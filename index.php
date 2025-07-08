@@ -6,7 +6,21 @@ if (!isset($_SESSION['login'])) {
 }
 include 'conexion.php';
 
+// Capturar término de búsqueda
+$busqueda = isset($_GET['busqueda']) ? $conn->real_escape_string($_GET['busqueda']) : '';
+
 $sql = "SELECT * FROM maquinaria";
+
+if ($busqueda !== '') {
+    $sql .= " WHERE 
+        nombre LIKE '%$busqueda%' OR 
+        descripcion LIKE '%$busqueda%' OR 
+        modelo LIKE '%$busqueda%' OR 
+        numero_serie LIKE '%$busqueda%' OR 
+        ubicacion LIKE '%$busqueda%' OR 
+        estado LIKE '%$busqueda%'";
+}
+
 $resultado = $conn->query($sql);
 ?>
 
@@ -21,6 +35,7 @@ $resultado = $conn->query($sql);
             max-width: 120px;
             height: auto;
             border-radius: 8px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -38,6 +53,13 @@ $resultado = $conn->query($sql);
 
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Lista de Maquinaria</h2>
+
+    <!-- Formulario de búsqueda -->
+    <form method="GET" class="mb-4 text-center">
+        <input type="text" name="busqueda" placeholder="Buscar maquinaria..." value="<?php echo htmlspecialchars($busqueda); ?>" class="form-control d-inline-block" style="width: 300px;">
+        <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+        <a href="index.php" class="btn btn-secondary ms-2">Limpiar</a>
+    </form>
 
     <?php if ($resultado->num_rows > 0): ?>
         <div class="table-responsive">
@@ -84,9 +106,33 @@ $resultado = $conn->query($sql);
     <?php endif; ?>
 </div>
 
+<!-- Modal para imagen grande -->
+<div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <img src="" id="imagenModalSrc" class="img-fluid w-100" alt="Imagen grande">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JS para imagen en modal -->
+<script>
+    document.querySelectorAll('img.thumb').forEach(img => {
+        img.addEventListener('click', () => {
+            const src = img.getAttribute('src');
+            document.getElementById('imagenModalSrc').setAttribute('src', src);
+            new bootstrap.Modal(document.getElementById('imagenModal')).show();
+        });
+    });
+</script>
+
 </body>
 </html>
-
-
-                                
-

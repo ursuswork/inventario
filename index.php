@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 if (!isset($_SESSION['login'])) {
     header("Location: login.php");
@@ -40,7 +44,7 @@ while ($fila = $resultado->fetch_assoc()) {
     echo "<p><b>Año:</b> " . htmlspecialchars($fila['anio']) . "</p>";
     echo "<p><b>Número de serie:</b> " . htmlspecialchars($fila['numero_serie']) . "</p>";
     echo "<img src='" . htmlspecialchars($fila['imagen']) . "' width='200'><br>";
-    echo "<a href='editar.php?id=" . $fila['id'] . "'>📝 Editar</a> | ";
+   echo "<a href='editar.php?id=" . $fila['id'] . "'>📝 Editar</a> | ";
     echo "<a href='eliminar.php?id=" . $fila['id'] . "' onclick=\"return confirm('¿Seguro que deseas eliminar este registro?');\">🗑️ Eliminar</a><hr>";
 
 }

@@ -1,37 +1,32 @@
 <?php
-session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
-    exit();
-}
-include "conexion.php";
+include 'conexion.php';
 
-$nombre = $_POST['nombre'];
-$descripcion = $_POST['descripcion'];
-$ubicacion = $_POST['ubicacion'];
-$fecha_adquisicion = $_POST['fecha_adquisicion'];
-$estado = $_POST['estado'];
-$modelo = $_POST['modelo'];
-$anio = $_POST['anio'];
-$numero_serie = $_POST['numero_serie'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $modelo = $_POST['modelo'];
+    $numero_serie = $_POST['numero_serie'];
+    $ubicacion = $_POST['ubicacion'];
+    $estado = $_POST['estado'];
 
-$imagen = $_FILES['imagen']['name'];
-$ruta = "carpeta_imagenes/" . basename($imagen);
+    $imagen = '';
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $nombreImagen = time() . '_' . basename($_FILES['imagen']['name']);
+        $ruta = 'imagenes/' . $nombreImagen;
+        move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta);
+        $imagen = $nombreImagen;
+    }
 
-if (move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta)) {
-    $sql = "INSERT INTO maquinaria (nombre, descripcion, imagen, ubicacion, fecha_adquisicion, estado, modelo, anio, numero_serie)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO maquinaria (nombre, descripcion, modelo, numero_serie, ubicacion, estado, imagen)
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        die("Error en prepare(): " . $conn->error);
-    }
-    $stmt->bind_param("sssssssis", $nombre, $descripcion, $ruta, $ubicacion, $fecha_adquisicion, $estado, $modelo, $anio, $numero_serie);
+    $stmt->bind_param("sssssss", $nombre, $descripcion, $modelo, $numero_serie, $ubicacion, $estado, $imagen);
+
     if ($stmt->execute()) {
-        echo "Maquinaria agregada.<br><a href='index.php'>Volver</a>";
+        header("Location: index.php");
+        exit();
     } else {
-        echo "Error al guardar.";
+        echo "Error al guardar los datos.";
     }
-} else {
-    echo "Error al subir imagen.";
 }
 ?>

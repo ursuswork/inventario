@@ -1,51 +1,75 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 session_start();
 if (!isset($_SESSION['login'])) {
     header("Location: login.php");
     exit();
 }
-include "conexion.php";
+include 'conexion.php';
 
-$busqueda = isset($_GET['buscar']) ? $_GET['buscar'] : '';
-
-if ($busqueda != '') {
-    $sql = "SELECT * FROM maquinaria WHERE nombre LIKE ? OR numero_serie LIKE ?";
-    $stmt = $conn->prepare($sql);
-    $like = '%' . $busqueda . '%';
-    $stmt->bind_param("ss", $like, $like);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-} else {
-    $resultado = $conn->query("SELECT * FROM maquinaria");
-}
+$sql = "SELECT * FROM maquinaria";
+$resultado = $conn->query($sql);
 ?>
 
-<form method="GET" action="index.php">
-    <input type="text" name="buscar" placeholder="Buscar maquinaria" value="<?php echo htmlspecialchars($busqueda); ?>">
-    <button type="submit">Buscar</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario de Maquinaria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        img.thumb {
+            max-width: 120px;
+            height: auto;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="bg-light">
 
-<a href='agregar.php'>Agregar nueva maquinaria</a> |
-<a href='logout.php'>Cerrar sesión</a>
-<hr>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="index.php">Inventario</a>
+    <div>
+      <a class="btn btn-outline-light" href="agregar.php">Agregar Maquinaria</a>
+      <a class="btn btn-outline-light ms-2" href="logout.php">Cerrar sesión</a>
+    </div>
+  </div>
+</nav>
 
-<?php
-while ($fila = $resultado->fetch_assoc()) {
-    echo "<h3>" . htmlspecialchars($fila['nombre']) . "</h3>";
-    echo "<p><b>Descripción:</b> " . htmlspecialchars($fila['descripcion']) . "</p>";
-    echo "<p><b>Ubicación:</b> " . htmlspecialchars($fila['ubicacion']) . "</p>";
-    echo "<p><b>Fecha de adquisición:</b> " . htmlspecialchars($fila['fecha_adquisicion']) . "</p>";
-    echo "<p><b>Estado:</b> " . htmlspecialchars($fila['estado']) . "</p>";
-    echo "<p><b>Modelo:</b> " . htmlspecialchars($fila['modelo']) . "</p>";
-    echo "<p><b>Año:</b> " . htmlspecialchars($fila['anio']) . "</p>";
-    echo "<p><b>Número de serie:</b> " . htmlspecialchars($fila['numero_serie']) . "</p>";
-    echo "<img src='" . htmlspecialchars($fila['imagen']) . "' width='200'><br>";
-   echo "<a href='editar.php?id=" . $fila['id'] . "'>📝 Editar</a> | ";
-    echo "<a href='eliminar.php?id=" . $fila['id'] . "' onclick=\"return confirm('¿Seguro que deseas eliminar este registro?');\">🗑️ Eliminar</a><hr>";
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Lista de Maquinaria</h2>
 
-}
-?>
+    <?php if ($resultado->num_rows > 0): ?>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Modelo</th>
+                        <th>N° Serie</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($fila = $resultado->fetch_assoc()): ?>
+                        <tr>
+                            <td class="text-center">
+                                <?php if ($fila['imagen']): ?>
+                                    <img src="imagenes/<?php echo $fila['imagen']; ?>" alt="Imagen" class="thumb">
+                                <?php else: ?>
+                                    <span class="text-muted">Sin imagen</span>
+                                <?php endif; ?>
+                            </td>
+                            <td><?php echo htmlspecialchars($fila['nombre']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['descripcion']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['modelo']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['numero_serie']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['ubicacion']); ?></td>
+                            <td><?php echo htmlspecialchars($fila['estado']); ?></td>
+                            <td class="text-center">
+                                <a href="editar.php?id=<?php echo $fila['id']; ?>" class="btn btn-sm btn-primary mb-1">Editar</a>
+                                <a href="el

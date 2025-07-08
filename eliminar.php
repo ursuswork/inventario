@@ -1,25 +1,35 @@
 <?php
-session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
+include 'conexion.php';
+
+if (!isset($_GET['id'])) {
+    header("Location: index.php");
     exit();
 }
-include "conexion.php";
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+$id = intval($_GET['id']);
 
-    // Eliminar imagen del servidor
-    $consulta = $conn->query("SELECT imagen FROM maquinaria WHERE id = $id");
-    if ($consulta && $fila = $consulta->fetch_assoc()) {
-        if (file_exists($fila['imagen'])) {
-            unlink($fila['imagen']);
-        }
+// Buscar la imagen para eliminarla
+$sql = "SELECT imagen FROM maquinaria WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$resultado = $stmt->get_result();
+
+if ($resultado->num_rows === 1) {
+    $fila = $resultado->fetch_assoc();
+    $imagen = $fila['imagen'];
+
+    if ($imagen && file_exists("imagenes/" . $imagen)) {
+        unlink("imagenes/" . $imagen);
     }
 
-    // Eliminar registro de base de datos
-    $conn->query("DELETE FROM maquinaria WHERE id = $id");
+    // Eliminar registro
+    $sqlDelete = "DELETE FROM maquinaria WHERE id = ?";
+    $stmtDelete = $conn->prepare($sqlDelete);
+    $stmtDelete->bind_param("i", $id);
+    $stmtDelete->execute();
 }
 
 header("Location: index.php");
+exit();
 ?>

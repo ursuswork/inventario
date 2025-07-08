@@ -1,50 +1,31 @@
 <?php
-session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
-    exit();
-}
-include "conexion.php";
+include 'conexion.php';
 
-$id = $_POST['id'];
-$nombre = $_POST['nombre'];
-$descripcion = $_POST['descripcion'];
-$ubicacion = $_POST['ubicacion'];
-$fecha_adquisicion = $_POST['fecha_adquisicion'];
-$estado = $_POST['estado'];
-$modelo = $_POST['modelo'];
-$anio = $_POST['anio'];
-$numero_serie = $_POST['numero_serie'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = intval($_POST['id']);
+    $nombre = $_POST['nombre'];
+    $descripcion = $_POST['descripcion'];
+    $modelo = $_POST['modelo'];
+    $numero_serie = $_POST['numero_serie'];
+    $ubicacion = $_POST['ubicacion'];
+    $estado = $_POST['estado'];
 
-// Obtener la imagen actual
-$sql = "SELECT imagen FROM maquinaria WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
-$imagen_actual = $row['imagen'];
+    // Obtener la imagen actual
+    $sqlImagen = "SELECT imagen FROM maquinaria WHERE id = ?";
+    $stmtImagen = $conn->prepare($sqlImagen);
+    $stmtImagen->bind_param("i", $id);
+    $stmtImagen->execute();
+    $resultado = $stmtImagen->get_result();
+    $fila = $resultado->fetch_assoc();
+    $imagen_actual = $fila['imagen'];
 
-// Procesar nueva imagen si se subió
-if (!empty($_FILES['imagen']['name'])) {
-    // Borrar la imagen anterior
-    if (file_exists($imagen_actual)) {
-        unlink($imagen_actual);
-    }
-    $imagen = $_FILES['imagen']['name'];
-    $ruta = "carpeta_imagenes/" . basename($imagen);
-    move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta);
-} else {
-    $ruta = $imagen_actual;
-}
+    // Procesar nueva imagen si se cargó
+    $nueva_imagen = $imagen_actual;
+    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $nombreImagen = time() . '_' . basename($_FILES['imagen']['name']);
+        $ruta = 'imagenes/' . $nombreImagen;
+        move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta);
+        $nueva_imagen = $nombreImagen;
 
-// Actualizar la base de datos
-$sql = "UPDATE maquinaria SET nombre=?, descripcion=?, imagen=?, ubicacion=?, fecha_adquisicion=?, estado=?, modelo=?, anio=?, numero_serie=? WHERE id=?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssssssi", $nombre, $descripcion, $ruta, $ubicacion, $fecha_adquisicion, $estado, $modelo, $anio, $numero_serie, $id);
-if ($stmt->execute()) {
-    header("Location: index.php");
-} else {
-    echo "Error al actualizar.";
-}
-?>
+        // Eliminar imagen anterior si existe
+

@@ -1,7 +1,13 @@
 <?php
+session_start();
+if (!isset($_SESSION['login'])) {
+    header("Location: login.php");
+    exit();
+}
+
 include 'conexion.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = intval($_POST['id']);
     $nombre = $_POST['nombre'];
     $descripcion = $_POST['descripcion'];
@@ -10,22 +16,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ubicacion = $_POST['ubicacion'];
     $estado = $_POST['estado'];
 
-    // Obtener la imagen actual
-    $sqlImagen = "SELECT imagen FROM maquinaria WHERE id = ?";
-    $stmtImagen = $conn->prepare($sqlImagen);
-    $stmtImagen->bind_param("i", $id);
-    $stmtImagen->execute();
-    $resultado = $stmtImagen->get_result();
-    $fila = $resultado->fetch_assoc();
-    $imagen_actual = $fila['imagen'];
+    $sql = "UPDATE maquinaria SET 
+                nombre = ?, 
+                descripcion = ?, 
+                modelo = ?, 
+                numero_serie = ?, 
+                ubicacion = ?, 
+                estado = ?
+            WHERE id = ?";
 
-    // Procesar nueva imagen si se cargó
-    $nueva_imagen = $imagen_actual;
-    if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-        $nombreImagen = time() . '_' . basename($_FILES['imagen']['name']);
-        $ruta = 'imagenes/' . $nombreImagen;
-        move_uploaded_file($_FILES['imagen']['tmp_name'], $ruta);
-        $nueva_imagen = $nombreImagen;
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssi", $nombre, $descripcion, $modelo, $numero_serie, $ubicacion, $estado, $id);
 
-        // Eliminar imagen anterior si existe
-
+    if ($stmt->execute()) {
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "Error al actualizar: " . $conn->error;
+    }
+}
+?>

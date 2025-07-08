@@ -72,4 +72,20 @@ $resultado = $conn->query($sql);
                             <td><?php echo htmlspecialchars($fila['estado']); ?></td>
                             <td class="text-center">
                                 <a href="editar.php?id=<?php echo $fila['id']; ?>" class="btn btn-sm btn-primary mb-1">Editar</a>
-                                <a href="el
+                                <a href="eliminar.php?id=<?php echo $fila['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este registro?')">Eliminar</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <p class="text-center text-muted">No hay maquinaria registrada.</p>
+    <?php endif; ?>
+</div>
+
+</body>
+</html>
+
+                                
+

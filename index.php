@@ -62,7 +62,7 @@ $resultado = $conn->query($sql);
         ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
-<?php endif; ?>
+    <?php endif; ?>
     <a class="navbar-brand" href="index.php">Inventario</a>
     <div>
       <a class="btn btn-outline-light" href="agregar.php">Agregar Maquinaria</a>
@@ -80,6 +80,11 @@ $resultado = $conn->query($sql);
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
         <a href="index.php" class="btn btn-secondary ms-2">Limpiar</a>
     </form>
+
+    <!-- Botón de exportar Excel (siempre visible) -->
+    <div class="text-center mb-4">
+        <a href="exportar_excel.php" class="btn btn-success">📥 Exportar a Excel</a>
+    </div>
 
     <?php if ($resultado->num_rows > 0): ?>
         <div class="table-responsive">

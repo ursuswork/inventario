@@ -44,6 +44,6 @@ $stmt->close();
 $conn->close();
 
 // Redirigir al index
-header("Location: index.php");
+header("Location: index.php?mensaje=agregado");
 exit();
 ?>

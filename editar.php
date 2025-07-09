@@ -35,7 +35,7 @@ $fila = $resultado->fetch_assoc();
 
 <div class="container mt-5">
     <h3 class="mb-4">Editar Maquinaria</h3>
-    <form action="procesar_editar.php" method="POST">
+    <form action="procesar_editar.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?php echo $fila['id']; ?>">
 
         <div class="mb-3">
@@ -72,6 +72,17 @@ $fila = $resultado->fetch_assoc();
             </select>
         </div>
 
+        <div class="mb-3">
+            <label>Imagen actual:</label><br>
+            <?php if (!empty($fila['imagen'])): ?>
+                <img src="imagenes/<?php echo htmlspecialchars($fila['imagen']); ?>" width="150"><br><br>
+            <?php else: ?>
+                <p>No hay imagen cargada.</p>
+            <?php endif; ?>
+            <label>Cambiar imagen:</label>
+            <input type="file" name="nueva_imagen" class="form-control">
+        </div>
+
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         <a href="index.php" class="btn btn-secondary">Cancelar</a>
     </form>
@@ -79,4 +90,3 @@ $fila = $resultado->fetch_assoc();
 
 </body>
 </html>
-

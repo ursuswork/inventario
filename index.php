@@ -43,6 +43,26 @@ $resultado = $conn->query($sql);
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
+    <?php if (isset($_GET['mensaje'])): ?>
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <?php
+        switch ($_GET['mensaje']) {
+            case 'editado':
+                echo "✅ Cambios guardados correctamente.";
+                break;
+            case 'agregado':
+                echo "✅ Maquinaria agregada exitosamente.";
+                break;
+            case 'eliminado':
+                echo "🗑️ Registro eliminado correctamente.";
+                break;
+            default:
+                echo "✅ Acción realizada.";
+        }
+        ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+<?php endif; ?>
     <a class="navbar-brand" href="index.php">Inventario</a>
     <div>
       <a class="btn btn-outline-light" href="agregar.php">Agregar Maquinaria</a>

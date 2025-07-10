@@ -1,8 +1,8 @@
 <?php
-$host = "localhost"; // Cambia por tu host de Clever Cloud
-$user = "TU_USUARIO";
-$pass = "TU_PASSWORD";
-$db   = "TU_BASE_DE_DATOS";
+$host = "lbdzoct2jn9ksippy95ki-mysql.services.clever-cloud.com"; // Cambia por tu host de Clever Cloud
+$user = "uuzl4t1j1mcb7jhh";
+$pass = "fHWEgXQ8MRclMUMJbjL5";
+$db   = "bdzoct2jn9ksippy95ki";
 
 $conn = new mysqli($host, $user, $pass, $db);
 

@@ -7,7 +7,6 @@ if (!isset($_SESSION['login'])) {
 
 include 'conexion.php';
 
-// Recibir datos del formulario
 $nombre = $_POST['nombre'];
 $descripcion = $_POST['descripcion'];
 $modelo = $_POST['modelo'];
@@ -22,14 +21,12 @@ if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
     $nombreImagen = basename($_FILES['imagen']['name']);
     $rutaCompleta = $directorioDestino . $nombreImagen;
 
-    // Asegúrate de que la carpeta exista
     if (!is_dir($directorioDestino)) {
         mkdir($directorioDestino, 0755, true);
     }
 
-    // Mueve la imagen subida a la carpeta 'imagenes/'
     if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaCompleta)) {
-        $nombreImagen = ''; // Si falla, no se guarda imagen
+        $nombreImagen = '';
     }
 }
 
@@ -39,11 +36,12 @@ $sql = "INSERT INTO maquinaria (nombre, descripcion, modelo, numero_serie, ubica
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sssssss", $nombre, $descripcion, $modelo, $numero_serie, $ubicacion, $estado, $nombreImagen);
 $stmt->execute();
-$stmt->close();
 
+$id_maquinaria = $conn->insert_id;
+
+$stmt->close();
 $conn->close();
 
-// Redirigir al index
-header("Location: index.php?mensaje=agregado");
+header("Location: formulario_recibo.php?id_maquinaria=" . $id_maquinaria);
 exit();
 ?>

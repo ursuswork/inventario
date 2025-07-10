@@ -1,12 +1,12 @@
 <?php
-$host = getenv("MYSQL_ADDON_HOST");
-$user = getenv("MYSQL_ADDON_USER");
-$pass = getenv("MYSQL_ADDON_PASSWORD");
-$db   = getenv("MYSQL_ADDON_DB");
+$host = "localhost"; // Cambia por tu host de Clever Cloud
+$user = "TU_USUARIO";
+$pass = "TU_PASSWORD";
+$db   = "TU_BASE_DE_DATOS";
 
 $conn = new mysqli($host, $user, $pass, $db);
 
 if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+    die("❌ Error en la conexión: " . $conn->connect_error);
 }
 ?>

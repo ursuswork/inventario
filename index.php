@@ -7,11 +7,11 @@ if (!isset($_SESSION['login'])) {
 
 include 'conexion.php';
 
-// Consulta con subconsulta para obtener condición estimada
+// Consulta con subconsulta para obtener condición estimada desde la columna correcta
 $sql = "
 SELECT m.*, 
   (
-    SELECT r.condicion_estimada 
+    SELECT r.condicion_final 
     FROM recibos_unidad r 
     WHERE r.id_maquinaria = m.id 
     ORDER BY r.id DESC 
@@ -66,7 +66,19 @@ $resultado = $conn->query($sql);
                 <td><?= htmlspecialchars($fila['numero_serie']) ?></td>
                 <td><?= htmlspecialchars($fila['ubicacion']) ?></td>
                 <td><?= htmlspecialchars($fila['estado']) ?></td>
-                <td><?= $fila['condicion_estimada'] !== null ? $fila['condicion_estimada'] . '%' : '—' ?></td>
+                <td>
+<?php
+$cond = $fila['condicion_estimada'];
+if ($cond === null) {
+    echo '<span class="text-muted">—</span>';
+} elseif ($cond >= 80) {
+    echo '<span class="text-success fw-bold">' . $cond . '%</span>';
+} elseif ($cond >= 50) {
+    echo '<span class="text-warning fw-bold">' . $cond . '%</span>';
+} else {
+    echo '<span class="text-danger fw-bold">' . $cond . '%</span>';
+}
+?>
                 <td>
                     <?php if (!empty($fila['imagen'])): ?>
                         <img src="imagenes/<?= htmlspecialchars($fila['imagen']) ?>" width="80">

@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 if (!isset($_SESSION['login'])) {
@@ -6,7 +7,7 @@ if (!isset($_SESSION['login'])) {
 }
 
 include 'conexion.php';
-$sql = "SELECT * FROM maquinaria";
+$sql = "SELECT * FROM maquinaria ORDER BY condicion_maquina DESC, nombre ASC";
 $resultado = $conn->query($sql);
 ?>
 <!DOCTYPE html>
@@ -45,7 +46,19 @@ $resultado = $conn->query($sql);
             </tr>
         </thead>
         <tbody>
-            <?php while ($fila = $resultado->fetch_assoc()): ?>
+            <?php
+            $actual_tipo = '';
+            while ($fila = $resultado->fetch_assoc()):
+                $tipo_actual = $fila['condicion_maquina'] ?? 'usada';
+                if ($tipo_actual !== $actual_tipo):
+                    $actual_tipo = $tipo_actual;
+            ?>
+                <tr class="table-secondary">
+                    <td colspan="9" class="text-center fw-bold">
+                        <?= strtoupper($tipo_actual) === 'NUEVA' ? '🆕 Maquinaria NUEVA' : '🛠️ Maquinaria USADA' ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
             <tr>
                 <td><?= $fila['id'] ?></td>
                 <td><?= htmlspecialchars($fila['nombre']) ?></td>
@@ -54,14 +67,14 @@ $resultado = $conn->query($sql);
                 <td><?= htmlspecialchars($fila['ubicacion']) ?></td>
                 <td><?= htmlspecialchars($fila['estado']) ?></td>
                 <td>
-                <?php
-                $cond = $fila['condicion_estimada'];
-                if ($cond === null || $cond === '') {
-                    echo '<span class="text-muted">—</span>';
-                } else {
-                    echo intval($cond) . '%';
-                }
-                ?>
+                    <?php
+                    $cond = $fila['condicion_estimada'];
+                    if ($cond === null || $cond === '') {
+                        echo '<span class="text-muted">—</span>';
+                    } else {
+                        echo intval($cond) . '%';
+                    }
+                    ?>
                 </td>
                 <td>
                     <?php if (!empty($fila['imagen'])): ?>

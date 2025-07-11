@@ -1,139 +1,84 @@
 <?php
 session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
-    exit();
-}
 include 'conexion.php';
 
-$id_maquinaria = isset($_GET['id_maquinaria']) ? intval($_GET['id_maquinaria']) : 0;
-if ($id_maquinaria <= 0) {
-    die("ID de maquinaria inválido.");
-}
-
-// Obtener datos de maquinaria
-$datos_maquinaria = [];
-$sql = "SELECT * FROM maquinaria WHERE id = ? LIMIT 1";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_maquinaria);
-$stmt->execute();
-$result = $stmt->get_result();
-if ($result && $result->num_rows === 1) {
-    $datos_maquinaria = $result->fetch_assoc();
-} else {
-    die("No se encontró la maquinaria con ID $id_maquinaria");
-}
-$stmt->close();
-?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Formulario Recibo de Unidad</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-    const pesos = {
-        motor: 0.3,
-        electrico: 0.25,
-        hidraulico: 0.3,
-        estetico: 0.05,
-        consumibles: 0.1
-    };
-    const valores = { bueno: 100, regular: 70, malo: 40 };
-
-    function calcularPorcentaje() {
-        let secciones = {
-            motor: [...document.querySelectorAll('[data-seccion="motor"]')],
-            electrico: [...document.querySelectorAll('[data-seccion="electrico"]')],
-            hidraulico: [...document.querySelectorAll('[data-seccion="hidraulico"]')],
-            estetico: [...document.querySelectorAll('[data-seccion="estetico"]')],
-            consumibles: [...document.querySelectorAll('[data-seccion="consumibles"]')],
-        };
-
-        let total = 0;
-        for (let sec in secciones) {
-            let campos = secciones[sec];
-            let suma = 0, cuenta = 0;
-            campos.forEach(radio => {
-                if (radio.checked) {
-                    suma += valores[radio.value];
-                    cuenta++;
-                }
-            });
-            let promedio = cuenta ? suma / cuenta : 0;
-            total += promedio * pesos[sec];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    function convertir_valor($estado) {
+        switch ($estado) {
+            case 'bueno': return 100;
+            case 'regular': return 70;
+            case 'malo': return 40;
+            default: return 0;
         }
-        document.getElementById("condicion_estimada").value = Math.round(total);
     }
-    </script>
-</head>
-<body class="bg-light">
-<div class="container mt-4">
-    <h4>Formulario de Recibo - Maquinaria ID <?= $id_maquinaria ?></h4>
-    <form action="procesar_recibo.php" method="POST" oninput="calcularPorcentaje()">
-        <input type="hidden" name="id_maquinaria" value="<?= $id_maquinaria ?>">
 
-        <div class="row">
-            <div class="col-md-6">
-                <label class="form-label">Empresa Origen</label>
-                <input type="text" name="empresa_origen" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['empresa_origen'] ?? '') ?>">
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Empresa Destino</label>
-                <input type="text" name="empresa_destino" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['empresa_destino'] ?? '') ?>">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Equipo</label>
-                <input type="text" name="equipo" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['nombre'] ?? '') ?>">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Inventario</label>
-                <input type="text" name="inventario" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['inventario'] ?? '') ?>">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Marca</label>
-                <input type="text" name="marca" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['marca'] ?? '') ?>">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Serie</label>
-                <input type="text" name="serie" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['numero_serie'] ?? '') ?>">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Modelo</label>
-                <input type="text" name="modelo" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['modelo'] ?? '') ?>">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Motor</label>
-                <input type="text" name="motor" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['motor'] ?? '') ?>">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Color</label>
-                <input type="text" name="color" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['color'] ?? '') ?>">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Placas</label>
-                <input type="text" name="placas" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['placas'] ?? '') ?>">
-            </div>
-        </div>
+    $motor       = $_POST['motor'];
+    $mecanico    = $_POST['mecanico'];
+    $hidraulico  = $_POST['hidraulico'];
+    $electrico   = $_POST['electrico'];
+    $estetico    = $_POST['estetico'];
+    $consumibles = $_POST['consumibles'];
+    $id_maquinaria = intval($_POST['id_maquinaria']);
 
-        <hr>
+    $v_motor       = convertir_valor($motor);
+    $v_mecanico    = convertir_valor($mecanico);
+    $v_hidraulico  = convertir_valor($hidraulico);
+    $v_electrico   = convertir_valor($electrico);
+    $v_estetico    = convertir_valor($estetico);
+    $v_consumibles = convertir_valor($consumibles);
 
-        <!-- Aquí van los campos por secciones como ya están definidos -->
-        <!-- (el bloque secciones motor, electrico, etc. permanece igual) -->
+    $prom_motor_mecanico  = ($v_motor + $v_mecanico) / 2 * 0.30;
+    $prom_hidraulico      = $v_hidraulico * 0.30;
+    $prom_electrico       = $v_electrico * 0.25;
+    $prom_estetico        = $v_estetico * 0.05;
+    $prom_consumibles     = $v_consumibles * 0.10;
 
-        <div class="mb-3 mt-4">
-            <label class="form-label">Observaciones</label>
-            <textarea name="observaciones" class="form-control" rows="4"></textarea>
-        </div>
+    $condicion_total = round(
+        $prom_motor_mecanico +
+        $prom_hidraulico +
+        $prom_electrico +
+        $prom_estetico +
+        $prom_consumibles
+    );
 
-        <div class="mb-3">
-            <label class="form-label">Condición estimada (%)</label>
-            <input type="number" name="condicion_estimada" id="condicion_estimada" class="form-control" readonly>
-        </div>
+    // Guardar en tabla de historial de recibos
+    $sql_insert = "INSERT INTO recibos (
+        id_maquinaria, motor, mecanico, hidraulico,
+        electrico, estetico, consumibles, condicion_total, fecha
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
-        <button type="submit" class="btn btn-success">Guardar Recibo</button>
-        <a href="index.php" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
-</body>
-</html>
+    $stmt_insert = $conn->prepare($sql_insert);
+    if ($stmt_insert) {
+        $stmt_insert->bind_param("issssssi",
+            $id_maquinaria, $motor, $mecanico, $hidraulico,
+            $electrico, $estetico, $consumibles, $condicion_total
+        );
+        $stmt_insert->execute();
+    }
+
+    // Actualizar en maquinaria
+    $sql_update = "UPDATE maquinaria SET 
+        condicion_estimada = ?,
+        motor = ?, mecanico = ?, hidraulico = ?,
+        electrico = ?, estetico = ?, consumibles = ?
+        WHERE id = ?";
+
+    $stmt_update = $conn->prepare($sql_update);
+    if ($stmt_update) {
+        $stmt_update->bind_param("issssssi", 
+            $condicion_total, 
+            $motor, $mecanico, $hidraulico, 
+            $electrico, $estetico, $consumibles,
+            $id_maquinaria
+        );
+
+        if ($stmt_update->execute()) {
+            echo "<script>alert('✅ Recibo guardado con éxito. Condición: $condicion_total%'); window.location.href='index.php';</script>";
+        } else {
+            echo "❌ Error al actualizar maquinaria: " . $stmt_update->error;
+        }
+    } else {
+        echo "❌ Error en preparación de UPDATE.";
+    }
+}
+?>

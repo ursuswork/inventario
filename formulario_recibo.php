@@ -82,50 +82,27 @@ if ($id_maquinaria <= 0) {
             </div>
         </div>
 
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label class="form-label">Serie</label>
+                <input type="text" name="serie" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Modelo</label>
+                <input type="text" name="modelo" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Motor</label>
+                <input type="text" name="motor" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Color</label>
+                <input type="text" name="color" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Placas</label>
+                <input type="text" name="placas" class="form-control">
+            </div>
+        </div>
+
         <hr>
-
-        <?php
-        $secciones = [
-            'motor' => ['cilindros','pistones','anillos','inyectores','block','cabeza','varillas','resortes','punterias','cigueñal','arbol_elevas','retenes','ligas','sensores_motor','poleas','concha','cremallera','clutch','coples','bomba_inyeccion','juntas','marcha','alternador','filtros','bases','soportes','turbo','escape','chicotes','transmision','diferenciales','cardan'],
-            'electrico' => ['alarmas','arneses','bobinas','botones','cables','cables_sensores','conectores','electro_valvulas','fusibles','porta_fusibles','indicadores','presion_agua_temp_volt','luces','modulos','torreta','relevadores','switch_llave','sensores_ee'],
-            'hidraulico' => ['banco_valvulas','bombas_accesorios','coples_hidraulicos','clutch_hidraulico','gatos_levante','gatos_direccion','gatos_accesorios','mangueras','motores_hidraulicos','orbitrol','torques_huv_satelites','valvulas_retencion','reductores'],
-            'estetico' => ['estetico','pintura','calcomanias','asiento','tapiceria','tolvas','cristales','accesorios','sistema_riego'],
-            'consumibles' => ['puntas','cuchillas','cepillos','separadores','llantas','rines','bandas_orugas']
-        ];
-
-        foreach ($secciones as $nombre => $campos):
-        echo "<h5 class='mt-4 text-capitalize'>" . ucfirst($nombre) . "</h5>";
-        foreach ($campos as $campo): ?>
-        <div class="mb-2">
-            <label class="form-label text-capitalize"><?= str_replace('_', ' ', $campo) ?></label><br>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="<?= $campo ?>" value="bueno" data-seccion="<?= $nombre ?>">
-                <label class="form-check-label">Bueno</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="<?= $campo ?>" value="regular" data-seccion="<?= $nombre ?>">
-                <label class="form-check-label">Regular</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="<?= $campo ?>" value="malo" data-seccion="<?= $nombre ?>">
-                <label class="form-check-label">Malo</label>
-            </div>
-        </div>
-        <?php endforeach; endforeach; ?>
-
-        <div class="mb-3 mt-4">
-            <label class="form-label">Observaciones</label>
-            <textarea name="observaciones" class="form-control" rows="4"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Condición estimada (%)</label>
-            <input type="number" name="condicion_estimada" id="condicion_estimada" class="form-control" readonly>
-        </div>
-
-        <button type="submit" class="btn btn-success">Guardar Recibo</button>
-        <a href="index.php" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
-</body>
-</html>

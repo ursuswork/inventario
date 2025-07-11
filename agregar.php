@@ -60,9 +60,9 @@ if (!isset($_SESSION['login'])) {
                 <div class="mb-3">
                     <label for="estado" class="form-label">Estado</label>
                     <select name="estado" id="estado" class="form-select">
-                        <option value="Operativa">Operativa</option>
-                        <option value="En mantenimiento">En mantenimiento</option>
-                        <option value="Inactiva">Inactiva</option>
+                        <option value="Operativo">Operativo</option>
+                        <option value="En reparación">En reparación</option>
+                        <option value="Fuera de servicio">Fuera de servicio</option>
                     </select>
                 </div>
 
@@ -71,14 +71,12 @@ if (!isset($_SESSION['login'])) {
                     <input type="file" name="imagen" id="imagen" class="form-control">
                 </div>
 
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-success">Guardar Maquinaria</button>
-                </div>
+                <button type="submit" class="btn btn-success">Guardar Maquinaria</button>
+                <a href="index.php" class="btn btn-secondary">Cancelar</a>
             </form>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

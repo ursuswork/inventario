@@ -56,35 +56,29 @@ $resultado = $conn->query($sql);
                 <td>
                 <?php
                 $cond = $fila['condicion_estimada'];
-                if ($cond === null) {
+                if ($cond === null || $cond === '') {
                     echo '<span class="text-muted">—</span>';
-                } elseif ($cond >= 80) {
-                    echo '<span class="text-success fw-bold">' . $cond . '%</span>';
-                } elseif ($cond >= 50) {
-                    echo '<span class="text-warning fw-bold">' . $cond . '%</span>';
                 } else {
-                    echo '<span class="text-danger fw-bold">' . $cond . '%</span>';
+                    echo intval($cond) . '%';
                 }
                 ?>
                 </td>
                 <td>
                     <?php if (!empty($fila['imagen'])): ?>
-                        <img src="imagenes/<?= htmlspecialchars($fila['imagen']) ?>" width="80">
+                        <img src="imagenes/<?= $fila['imagen'] ?>" alt="Imagen" style="max-width: 100px;">
                     <?php else: ?>
-                        Sin imagen
+                        <span class="text-muted">Sin imagen</span>
                     <?php endif; ?>
                 </td>
                 <td>
-                    <a href="editar.php?id=<?= $fila['id'] ?>" class="btn btn-sm btn-primary">Editar</a>
-                    <a href="formulario_recibo.php?id_maquinaria=<?= $fila['id'] ?>" class="btn btn-sm btn-warning">Recibo</a>
-                    <a href="eliminar.php?id=<?= $fila['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar?')">Eliminar</a>
+                    <a class="btn btn-sm btn-primary" href="editar.php?id=<?= $fila['id'] ?>">Editar</a>
+                    <a class="btn btn-sm btn-danger" href="eliminar.php?id=<?= $fila['id'] ?>" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
+                    <a class="btn btn-sm btn-warning" href="formulario_recibo.php?id_maquinaria=<?= $fila['id'] ?>">Recibo</a>
                 </td>
             </tr>
             <?php endwhile; ?>
         </tbody>
     </table>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

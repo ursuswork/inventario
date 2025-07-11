@@ -6,22 +6,9 @@ if (!isset($_SESSION['login'])) {
 }
 
 include 'conexion.php';
-
-// Consulta con subconsulta para obtener condición estimada desde la columna correcta
-$sql = "
-SELECT m.*, 
-  (
-    SELECT r.condicion_final 
-    FROM recibos_unidad r 
-    WHERE r.id_maquinaria = m.id 
-    ORDER BY r.id DESC 
-    LIMIT 1
-  ) AS condicion_estimada
-FROM maquinaria m
-";
+$sql = "SELECT * FROM maquinaria";
 $resultado = $conn->query($sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -67,18 +54,19 @@ $resultado = $conn->query($sql);
                 <td><?= htmlspecialchars($fila['ubicacion']) ?></td>
                 <td><?= htmlspecialchars($fila['estado']) ?></td>
                 <td>
-<?php
-$cond = $fila['condicion_estimada'];
-if ($cond === null) {
-    echo '<span class="text-muted">—</span>';
-} elseif ($cond >= 80) {
-    echo '<span class="text-success fw-bold">' . $cond . '%</span>';
-} elseif ($cond >= 50) {
-    echo '<span class="text-warning fw-bold">' . $cond . '%</span>';
-} else {
-    echo '<span class="text-danger fw-bold">' . $cond . '%</span>';
-}
-?>
+                <?php
+                $cond = $fila['condicion_estimada'];
+                if ($cond === null) {
+                    echo '<span class="text-muted">—</span>';
+                } elseif ($cond >= 80) {
+                    echo '<span class="text-success fw-bold">' . $cond . '%</span>';
+                } elseif ($cond >= 50) {
+                    echo '<span class="text-warning fw-bold">' . $cond . '%</span>';
+                } else {
+                    echo '<span class="text-danger fw-bold">' . $cond . '%</span>';
+                }
+                ?>
+                </td>
                 <td>
                     <?php if (!empty($fila['imagen'])): ?>
                         <img src="imagenes/<?= htmlspecialchars($fila['imagen']) ?>" width="80">

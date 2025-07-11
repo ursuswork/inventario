@@ -12,6 +12,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+    echo "<pre>";
+    print_r($_POST);
+    echo "</pre>";
+
     function convertir_valor($texto) {
         switch ($texto) {
             case 'bueno': return 100;
@@ -51,8 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $columnas = "id_maquinaria, condicion_estimada, empresa_origen, empresa_destino, equipo, inventario, marca, serie, modelo, motor, color, placas, observaciones";
-    $placeholders = "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-    $tipos = "idsssssssssss";
+    $placeholders = "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+    $tipos = "dsssssssssssss";
     $valores = [$id_maquinaria, $condicion_estimada, $empresa_origen, $empresa_destino, $equipo, $inventario, $marca, $serie, $modelo, $motor_texto, $color, $placas, $observaciones];
 
     foreach ($campos_convertidos as $campo => $valor) {

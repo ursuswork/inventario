@@ -1,90 +1,84 @@
 <?php
 session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
-    exit();
-}
-
 include 'conexion.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-
-    function convertir_valor($texto) {
-        switch ($texto) {
+    function convertir_valor($estado) {
+        switch ($estado) {
             case 'bueno': return 100;
             case 'regular': return 70;
             case 'malo': return 40;
-            default: return null;
+            default: return 0;
         }
     }
 
+    $motor       = $_POST['motor'];
+    $mecanico    = $_POST['mecanico'];
+    $hidraulico  = $_POST['hidraulico'];
+    $electrico   = $_POST['electrico'];
+    $estetico    = $_POST['estetico'];
+    $consumibles = $_POST['consumibles'];
     $id_maquinaria = intval($_POST['id_maquinaria']);
-    $empresa_origen = $_POST['empresa_origen'];
-    $empresa_destino = $_POST['empresa_destino'];
-    $equipo = $_POST['equipo'];
-    $inventario = $_POST['inventario'];
-    $marca = $_POST['marca'];
-    $serie = $_POST['serie'];
-    $modelo = $_POST['modelo'];
-    $motor_texto = $_POST['motor'];
-    $color = $_POST['color'];
-    $placas = $_POST['placas'];
-    $observaciones = $_POST['observaciones'];
-    $condicion_estimada = floatval($_POST['condicion_estimada']);
 
-    $secciones = [
-        'motor' => ['cilindros','pistones','anillos','inyectores','block','cabeza','varillas','resortes','punterias','cigueñal','arbol_elevas','retenes','ligas','sensores_motor','poleas','concha','cremallera','clutch','coples','bomba_inyeccion','juntas','marcha','alternador','filtros','bases','soportes','turbo','escape','chicotes','transmision','diferenciales','cardan'],
-        'electrico' => ['alarmas','arneses','bobinas','botones','cables','cables_sensores','conectores','electro_valvulas','fusibles','porta_fusibles','indicadores','presion_agua_temp_volt','luces','modulos','torreta','relevadores','switch_llave','sensores_ee'],
-        'hidraulico' => ['banco_valvulas','bombas_accesorios','coples_hidraulicos','clutch_hidraulico','gatos_levante','gatos_direccion','gatos_accesorios','mangueras','motores_hidraulicos','orbitrol','torques_huv_satelites','valvulas_retencion','reductores'],
-        'estetico' => ['estetico','pintura','calcomanias','asiento','tapiceria','tolvas','cristales','accesorios','sistema_riego'],
-        'consumibles' => ['puntas','cuchillas','cepillos','separadores','llantas','rines','bandas_orugas']
-    ];
+    $v_motor       = convertir_valor($motor);
+    $v_mecanico    = convertir_valor($mecanico);
+    $v_hidraulico  = convertir_valor($hidraulico);
+    $v_electrico   = convertir_valor($electrico);
+    $v_estetico    = convertir_valor($estetico);
+    $v_consumibles = convertir_valor($consumibles);
 
-    $campos_convertidos = [];
-    foreach ($secciones as $grupo => $lista) {
-        foreach ($lista as $campo) {
-            $campos_convertidos[$campo] = isset($_POST[$campo]) ? $_POST[$campo] : null;
+    $prom_motor_mecanico  = ($v_motor + $v_mecanico) / 2 * 0.30;
+    $prom_hidraulico      = $v_hidraulico * 0.30;
+    $prom_electrico       = $v_electrico * 0.25;
+    $prom_estetico        = $v_estetico * 0.05;
+    $prom_consumibles     = $v_consumibles * 0.10;
+
+    $condicion_total = round(
+        $prom_motor_mecanico +
+        $prom_hidraulico +
+        $prom_electrico +
+        $prom_estetico +
+        $prom_consumibles
+    );
+
+    // Guardar en tabla de historial de recibos
+    $sql_insert = "INSERT INTO recibos (
+        id_maquinaria, motor, mecanico, hidraulico,
+        electrico, estetico, consumibles, condicion_total, fecha
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+
+    $stmt_insert = $conn->prepare($sql_insert);
+    if ($stmt_insert) {
+        $stmt_insert->bind_param("issssssi",
+            $id_maquinaria, $motor, $mecanico, $hidraulico,
+            $electrico, $estetico, $consumibles, $condicion_total
+        );
+        $stmt_insert->execute();
+    }
+
+    // Actualizar en maquinaria
+    $sql_update = "UPDATE maquinaria SET 
+        condicion_estimada = ?,
+        motor = ?, mecanico = ?, hidraulico = ?,
+        electrico = ?, estetico = ?, consumibles = ?
+        WHERE id = ?";
+
+    $stmt_update = $conn->prepare($sql_update);
+    if ($stmt_update) {
+        $stmt_update->bind_param("issssssi", 
+            $condicion_total, 
+            $motor, $mecanico, $hidraulico, 
+            $electrico, $estetico, $consumibles,
+            $id_maquinaria
+        );
+
+        if ($stmt_update->execute()) {
+            echo "<script>alert('✅ Recibo guardado con éxito. Condición: $condicion_total%'); window.location.href='index.php';</script>";
+        } else {
+            echo "❌ Error al actualizar maquinaria: " . $stmt_update->error;
         }
-    }
-
-    $columnas = "id_maquinaria, condicion_estimada, empresa_origen, empresa_destino, equipo, inventario, marca, serie, modelo, motor, color, placas, observaciones";
-    $placeholders = "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-    $tipos = "dssssssssssss";
-    $valores = [$id_maquinaria, $condicion_estimada, $empresa_origen, $empresa_destino, $equipo, $inventario, $marca, $serie, $modelo, $motor_texto, $color, $placas, $observaciones];
-
-    foreach ($campos_convertidos as $campo => $valor) {
-        $columnas .= ", $campo";
-        $placeholders .= ", ?";
-        $tipos .= "s";
-        $valores[] = $valor;
-    }
-
-    $sql = "INSERT INTO recibos_unidad ($columnas) VALUES ($placeholders)";
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        die("Error al preparar consulta: " . $conn->error);
-    }
-
-    $stmt->bind_param($tipos, ...$valores);
-
-    if ($stmt->execute()) {
-        $update = $conn->prepare("UPDATE maquinaria SET condicion_estimada = ? WHERE id = ?");
-        $update->bind_param("di", $condicion_estimada, $id_maquinaria);
-        $update->execute();
-        $update->close();
-
-        header("Location: index.php");
-        exit();
     } else {
-        echo "❌ Error al guardar: " . $stmt->error;
+        echo "❌ Error en preparación de UPDATE.";
     }
-
-    $stmt->close();
-    $conn->close();
-} else {
-    echo "Acceso no autorizado.";
 }
 ?>

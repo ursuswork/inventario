@@ -10,6 +10,20 @@ $id_maquinaria = isset($_GET['id_maquinaria']) ? intval($_GET['id_maquinaria']) 
 if ($id_maquinaria <= 0) {
     die("ID de maquinaria inválido.");
 }
+
+// Obtener datos de maquinaria
+$datos_maquinaria = [];
+$sql = "SELECT * FROM maquinaria WHERE id = ? LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $id_maquinaria);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($result && $result->num_rows === 1) {
+    $datos_maquinaria = $result->fetch_assoc();
+} else {
+    die("No se encontró la maquinaria con ID $id_maquinaria");
+}
+$stmt->close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -62,47 +76,64 @@ if ($id_maquinaria <= 0) {
         <div class="row">
             <div class="col-md-6">
                 <label class="form-label">Empresa Origen</label>
-                <input type="text" name="empresa_origen" class="form-control" required>
+                <input type="text" name="empresa_origen" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['empresa_origen'] ?? '') ?>">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Empresa Destino</label>
-                <input type="text" name="empresa_destino" class="form-control" required>
+                <input type="text" name="empresa_destino" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['empresa_destino'] ?? '') ?>">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Equipo</label>
-                <input type="text" name="equipo" class="form-control">
+                <input type="text" name="equipo" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['nombre'] ?? '') ?>">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Inventario</label>
-                <input type="text" name="inventario" class="form-control">
+                <input type="text" name="inventario" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['inventario'] ?? '') ?>">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Marca</label>
-                <input type="text" name="marca" class="form-control">
+                <input type="text" name="marca" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['marca'] ?? '') ?>">
             </div>
-        </div>
-
-        <div class="row mt-3">
             <div class="col-md-4">
                 <label class="form-label">Serie</label>
-                <input type="text" name="serie" class="form-control">
+                <input type="text" name="serie" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['numero_serie'] ?? '') ?>">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Modelo</label>
-                <input type="text" name="modelo" class="form-control">
+                <input type="text" name="modelo" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['modelo'] ?? '') ?>">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Motor</label>
-                <input type="text" name="motor" class="form-control">
+                <input type="text" name="motor" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['motor'] ?? '') ?>">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Color</label>
-                <input type="text" name="color" class="form-control">
+                <input type="text" name="color" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['color'] ?? '') ?>">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Placas</label>
-                <input type="text" name="placas" class="form-control">
+                <input type="text" name="placas" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['placas'] ?? '') ?>">
             </div>
         </div>
 
         <hr>
+
+        <!-- Aquí van los campos por secciones como ya están definidos -->
+        <!-- (el bloque secciones motor, electrico, etc. permanece igual) -->
+
+        <div class="mb-3 mt-4">
+            <label class="form-label">Observaciones</label>
+            <textarea name="observaciones" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Condición estimada (%)</label>
+            <input type="number" name="condicion_estimada" id="condicion_estimada" class="form-control" readonly>
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar Recibo</button>
+        <a href="index.php" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

@@ -454,8 +454,7 @@
       <input type="hidden" name="condicion_estimada" id="condicion_estimada">
     </div>
 
-    <div class="text-center mb-3">
-      <button type="button" onclick="window.print()" class="btn btn-outline-primary me-2">🖨️ Imprimir</button>
+    <div class="text-center">
       <button type="submit" class="btn btn-success">Guardar Recibo</button>
     </div>
   </form>

@@ -15,7 +15,7 @@ if (!isset($_SESSION['login'])) {
 </head>
 <body class="container mt-5">
     <h2>➕ Agregar Nueva Maquinaria</h2>
-    <form action="procesar_agregar.php" method="POST">
+    <form action="procesar_agregar.php" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label">Nombre</label>
             <input type="text" name="nombre" class="form-control" required>
@@ -37,6 +37,10 @@ if (!isset($_SESSION['login'])) {
             <input type="text" name="estado" class="form-control">
         </div>
         <div class="mb-3">
+            <label class="form-label">Imagen</label>
+            <input type="file" name="imagen" class="form-control" accept="image/*">
+        </div>
+        <div class="mb-3">
             <label for="condicion_maquina" class="form-label">¿Es nueva o usada?</label>
             <select class="form-select" name="condicion_maquina" required>
                 <option value="">Selecciona...</option>
@@ -45,6 +49,7 @@ if (!isset($_SESSION['login'])) {
             </select>
         </div>
         <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="exportar_excel.php" class="btn btn-outline-primary ms-2">📤 Exportar a Excel</a>
     </form>
 </body>
 </html>

@@ -7,7 +7,14 @@ if (!isset($_SESSION['login'])) {
 }
 
 include 'conexion.php';
-$sql = "SELECT * FROM maquinaria ORDER BY condicion_maquina DESC, nombre ASC";
+
+$busqueda = isset($_GET['busqueda']) ? $conn->real_escape_string($_GET['busqueda']) : '';
+$sql = "SELECT * FROM maquinaria";
+if (!empty($busqueda)) {
+    $sql .= " WHERE nombre LIKE '%$busqueda%' OR modelo LIKE '%$busqueda%' OR numero_serie LIKE '%$busqueda%'";
+}
+$sql .= " ORDER BY condicion_maquina DESC, nombre ASC";
+
 $resultado = $conn->query($sql);
 
 if (!$resultado) {
@@ -33,7 +40,15 @@ if (!$resultado) {
   </div>
 </nav>
 
+
 <div class="container mt-5">
+    <form class="mb-3" method="GET">
+        <div class="input-group">
+            <input type="text" name="busqueda" class="form-control" placeholder="🔍 Buscar maquinaria..." value="<?= isset($_GET['busqueda']) ? htmlspecialchars($_GET['busqueda']) : '' ?>">
+            <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+        </div>
+    </form>
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0">Listado de Maquinaria</h3>
         <a href="exportar_excel.php" class="btn btn-outline-primary">📤 Exportar a Excel</a>
@@ -100,5 +115,27 @@ if (!$resultado) {
         </tbody>
     </table>
 </div>
+
+<!-- Modal para imagen -->
+<div class="modal fade" id="imagenModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <img src="" id="imagenAmpliada" class="w-100">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('img[alt="Imagen"]').forEach(function(img) {
+  img.style.cursor = 'pointer';
+  img.addEventListener('click', function() {
+    document.getElementById('imagenAmpliada').src = this.src;
+    new bootstrap.Modal(document.getElementById('imagenModal')).show();
+  });
+});
+</script>
 </body>
+
 </html>

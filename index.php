@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 if (!isset($_SESSION['login'])) {
@@ -135,6 +136,30 @@ document.querySelectorAll('img[alt="Imagen"]').forEach(function(img) {
   });
 });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Modal para imagen -->
+<div class="modal fade" id="imagenModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-0">
+        <img src="" id="imagenAmpliada" class="w-100">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('img[alt="Imagen"]').forEach(function(img) {
+  img.style.cursor = 'pointer';
+  img.addEventListener('click', function() {
+    document.getElementById('imagenAmpliada').src = this.src;
+    new bootstrap.Modal(document.getElementById('imagenModal')).show();
+  });
+});
+</script>
 </body>
+
 
 </html>

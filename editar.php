@@ -21,9 +21,8 @@ $maquina = $resultado->fetch_assoc();
 </head>
 <body class="container mt-5">
     <h2>✏️ Editar Maquinaria</h2>
-    <form action="procesar_editar.php" method="POST">
+    <form action="procesar_editar.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?= $maquina['id'] ?>">
-
         <div class="mb-3">
             <label class="form-label">Nombre</label>
             <input type="text" name="nombre" class="form-control" value="<?= htmlspecialchars($maquina['nombre']) ?>" required>
@@ -45,14 +44,25 @@ $maquina = $resultado->fetch_assoc();
             <input type="text" name="estado" class="form-control" value="<?= htmlspecialchars($maquina['estado']) ?>">
         </div>
         <div class="mb-3">
-            <label for="condicion_maquina" class="form-label">¿Es nueva o usada?</label>
+            <label class="form-label">Imagen actual</label><br>
+            <?php if (!empty($maquina['imagen'])): ?>
+                <img src="imagenes/<?= $maquina['imagen'] ?>" style="max-width: 150px;"><br>
+            <?php else: ?>
+                <span class="text-muted">No hay imagen</span>
+            <?php endif; ?>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Cambiar imagen</label>
+            <input type="file" name="imagen" class="form-control" accept="image/*">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">¿Es nueva o usada?</label>
             <select class="form-select" name="condicion_maquina" required>
                 <option value="">Selecciona...</option>
                 <option value="nueva" <?= $maquina['condicion_maquina'] === 'nueva' ? 'selected' : '' ?>>Nueva</option>
                 <option value="usada" <?= $maquina['condicion_maquina'] === 'usada' ? 'selected' : '' ?>>Usada</option>
             </select>
         </div>
-
         <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>
 </body>

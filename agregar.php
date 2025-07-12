@@ -49,7 +49,7 @@ if (!isset($_SESSION['login'])) {
             </select>
         </div>
         <button type="submit" class="btn btn-success">Guardar</button>
-        <a href="exportar_excel.php" class="btn btn-outline-primary ms-2">📤 Exportar a Excel</a>
+        
     </form>
 </body>
 </html>

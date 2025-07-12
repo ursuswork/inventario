@@ -1,101 +1,108 @@
 
-<?php
-session_start();
-include 'conexion.php';
-
-$id_maquinaria = isset($_GET['id_maquinaria']) ? intval($_GET['id_maquinaria']) : 0;
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Recibo de Unidad</title>
+    <title>Recibo de Unidad - Formato de Impresión</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa;
-        }
-        .form-section {
+            font-family: 'Arial', sans-serif;
             background: white;
-            padding: 25px;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            margin: 40px;
         }
-        h4 {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
+        h2 {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 40px;
         }
-        select {
+        .seccion-titulo {
+            background-color: #f0f0f0;
+            padding: 6px 12px;
+            font-weight: bold;
+            margin-top: 25px;
+            border-left: 4px solid #343a40;
+        }
+        table {
             width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+        th {
+            background-color: #e9ecef;
+            text-align: center;
+        }
+        .btn-imprimir {
+            margin-bottom: 30px;
         }
     </style>
 </head>
-<body class="container mt-4">
-    <h2 class="text-center mb-4">📋 Formulario de Recibo de Unidad</h2>
-    <form method="POST" action="procesar_recibo.php">
-        <input type="hidden" name="id_maquinaria" value="<?php echo $id_maquinaria; ?>">
+<body>
 
-        <?php
-        function generarCampo($label, $name) {
-            echo '<div class="row mb-3">
-                <label class="col-sm-4 col-form-label text-end" for="'. $name .'">'. $label .':</label>
-                <div class="col-sm-6">
-                    <select name="'. $name .'" id="'. $name .'" class="form-select" required>
-                        <option value="">Selecciona...</option>
-                        <option value="bueno">Bueno</option>
-                        <option value="regular">Regular</option>
-                        <option value="malo">Malo</option>
-                    </select>
-                </div>
-            </div>';
-        }
-        ?>
+    <div class="text-end">
+        <button class="btn btn-secondary btn-imprimir" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
 
-        <div class="form-section">
-            <h4>⚙️ Motor y Mecánico (30%)</h4>
-            <?php generarCampo('Motor', 'motor'); ?>
-            <?php generarCampo('Mecánico', 'mecanico'); ?>
-        </div>
+    <h2>📄 RECIBO DE UNIDAD</h2>
 
-        <div class="form-section">
-            <h4>💧 Sistema Hidráulico (30%)</h4>
-            <?php generarCampo('Sistema hidráulico', 'hidraulico'); ?>
-        </div>
+    <div class="seccion-titulo">📝 Datos Generales</div>
+    <table>
+        <tr><th>Empresa Origen</th><td>__________________________</td><th>Empresa Destino</th><td>__________________________</td></tr>
+        <tr><th>Equipo</th><td>__________________________</td><th>Inventario</th><td>__________________________</td></tr>
+        <tr><th>Marca</th><td>__________________________</td><th>Modelo</th><td>__________________________</td></tr>
+        <tr><th>Serie</th><td>__________________________</td><th>Motor</th><td>__________________________</td></tr>
+        <tr><th>Color</th><td>__________________________</td><th>Placas</th><td>__________________________</td></tr>
+    </table>
 
-        <div class="form-section">
-            <h4>🔌 Sistema Eléctrico y Electrónico (25%)</h4>
-            <?php generarCampo('Sistema eléctrico', 'electrico'); ?>
-        </div>
+    <div class="seccion-titulo">⚙️ Componentes del Motor</div>
+    <table>
+        <tr><th>Cilindros</th><th>Pistones</th><th>Anillos</th><th>Inyectores</th></tr>
+        <tr><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+        <tr><th>Block</th><th>Cabeza</th><th>Varillas</th><th>Resortes</th></tr>
+        <tr><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+        <tr><th>Punterías</th><th>Cigüeñal</th><th>Árbol Elevas</th><th>Retenes</th></tr>
+        <tr><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+    </table>
 
-        <div class="form-section">
-            <h4>🎨 Condición Estética (5%)</h4>
-            <?php generarCampo('Estético', 'estetico'); ?>
-        </div>
+    <div class="seccion-titulo">🔧 Mecánico</div>
+    <table>
+        <tr><th>Transmisión</th><th>Diferenciales</th><th>Cardán</th></tr>
+        <tr><td>____</td><td>____</td><td>____</td></tr>
+    </table>
 
-        <div class="form-section">
-            <h4>🧰 Consumibles (10%)</h4>
-            <?php generarCampo('Consumibles', 'consumibles'); ?>
-        </div>
+    <div class="seccion-titulo">🔌 Sistema Eléctrico</div>
+    <table>
+        <tr><th>Alarmas</th><th>Bobinas</th><th>Cables</th><th>Luces</th></tr>
+        <tr><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+    </table>
 
-        <div class="form-section">
-            <h4>🆕 Condición de la Máquina</h4>
-            <div class="row mb-3">
-                <label class="col-sm-4 col-form-label text-end" for="condicion_maquina">¿Es nueva o usada?</label>
-                <div class="col-sm-6">
-                    <select name="condicion_maquina" class="form-select" required>
-                        <option value="">Selecciona...</option>
-                        <option value="nueva">Nueva</option>
-                        <option value="usada">Usada</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+    <div class="seccion-titulo">🎨 Estético</div>
+    <table>
+        <tr><th>Pintura</th><th>Asiento</th><th>Tapicería</th><th>Calcomanías</th></tr>
+        <tr><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+    </table>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-success">Guardar Recibo</button>
-        </div>
-    </form>
+    <div class="seccion-titulo">💧 Hidráulico</div>
+    <table>
+        <tr><th>Mangueras</th><th>Bombas</th><th>Orbitrol</th><th>Reductores</th></tr>
+        <tr><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+    </table>
+
+    <div class="seccion-titulo">🧰 Consumibles</div>
+    <table>
+        <tr><th>Llantas</th><th>Bandas Orugas</th><th>Cuchillas</th><th>Separadores</th></tr>
+        <tr><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+    </table>
+
+    <div class="seccion-titulo">🗒️ Observaciones</div>
+    <table>
+        <tr><td style="height: 100px;">&nbsp;</td></tr>
+    </table>
+
 </body>
 </html>

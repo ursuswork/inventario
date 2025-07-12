@@ -1,4 +1,4 @@
-<!DOCT<?php
+<?php
 session_start();
 include 'conexion.php';
 
@@ -12,49 +12,44 @@ function convertir_valor($valor) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $tipo_maquinaria = $_POST['tipo_maquinaria'] ?? '';
-    if ($tipo_maquinaria !== 'usada') {
-        echo "<script>alert('Este formulario solo se aplica a maquinaria usada.');</script>";
-    } else {
-        $componentes = $_POST;
-        unset($componentes['submit']);
+    $componentes = $_POST;
+    unset($componentes['submit']);
 
-        $secciones = [
-            'motor_mecanico' => 0.30,
-            'hidraulico' => 0.30,
-            'electrico' => 0.25,
-            'estetico' => 0.05,
-            'consumibles' => 0.10
-        ];
+    $secciones = [
+        'motor_mecanico' => 0.30,
+        'hidraulico' => 0.30,
+        'electrico' => 0.25,
+        'estetico' => 0.05,
+        'consumibles' => 0.10
+    ];
 
-        $porcentajes = $conteos = array_fill_keys(array_keys($secciones), 0);
+    $porcentajes = $conteos = array_fill_keys(array_keys($secciones), 0);
 
-        foreach ($componentes as $campo => $valor) {
-            $val = convertir_valor($valor);
-            foreach ($secciones as $clave => $peso) {
-                if (str_starts_with($campo, $clave . '_')) {
-                    $porcentajes[$clave] += $val;
-                    $conteos[$clave]++;
-                    break;
-                }
-            }
-        }
-
-        $condicion_total = 0;
+    foreach ($componentes as $campo => $valor) {
+        $val = convertir_valor($valor);
         foreach ($secciones as $clave => $peso) {
-            if ($conteos[$clave] > 0) {
-                $prom = $porcentajes[$clave] / $conteos[$clave];
-                $condicion_total += ($prom * $peso);
+            if (str_starts_with($campo, $clave . '_')) {
+                $porcentajes[$clave] += $val;
+                $conteos[$clave]++;
+                break;
             }
         }
-
-        $stmt = $conn->prepare("INSERT INTO recibo_unidad (condicion_total) VALUES (?)");
-        $stmt->bind_param("d", $condicion_total);
-        $stmt->execute();
-        $stmt->close();
-
-        echo "<script>alert('Formulario guardado con éxito.');</script>";
     }
+
+    $condicion_total = 0;
+    foreach ($secciones as $clave => $peso) {
+        if ($conteos[$clave] > 0) {
+            $prom = $porcentajes[$clave] / $conteos[$clave];
+            $condicion_total += ($prom * $peso);
+        }
+    }
+
+    $stmt = $conn->prepare("INSERT INTO recibo_unidad (condicion_total) VALUES (?)");
+    $stmt->bind_param("d", $condicion_total);
+    $stmt->execute();
+    $stmt->close();
+
+    echo "<script>alert('Formulario guardado con éxito.');</script>";
 }
 ?>
 
@@ -84,13 +79,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body class="container">
 <h1 class="my-4">📋 Recibo de Unidad</h1>
 <form method="POST">
-  <div class="mb-3">
-    <label class="form-label">Tipo de Maquinaria:</label>
-    <select name="tipo_maquinaria" class="form-select">
-      <option value="nueva">Nueva</option>
-      <option value="usada">Usada</option>
-    </select>
-  </div>
 <?php
 $secciones = [
   'motor_mecanico' => ["CILINDROS","PISTONES","ANILLOS","INYECTORES","BLOCK","CABEZA","VARILLAS","RESORTES","PUNTERIAS","CIGUEÑAL","ARBOL DE LEVAS","RETENES","LIGAS","SENSORES","POLEAS","CONCHA","CREMAYERA","CLUTCH","COPLES","BOMBA DE INYECCION","JUNTAS","MARCHA","TUBERIA","ALTERNADOR","FILTROS","BASES","SOPORTES","TURBO","ESCAPE","CHICOTES","TRANSMISION","DIFERENCIALES","CARDAN"],
@@ -100,7 +88,6 @@ $secciones = [
   'consumibles' => ["PUNTAS","PORTA PUNTAS","GARRAS","CUCHILLAS","CEPILLOS","SEPARADORES","LLANTAS","RINES","BANDAS / ORUGAS"]
 ];
 
-if ($_POST['tipo_maquinaria'] ?? '' === 'usada') {
 foreach ($secciones as $clave => $campos) {
   $titulo = strtoupper(str_replace('_', ' ', $clave));
   echo "<div class='seccion'><div class='titulo-seccion'>$titulo</div><div class='row'>";
@@ -115,7 +102,7 @@ foreach ($secciones as $clave => $campos) {
     echo "</div></div>";
   }
   echo "</div></div>";
-}}
+}
 ?>
   <div class="my-4 text-center">
     <button class="btn btn-primary" type="submit" name="submit">Guardar</button>

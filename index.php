@@ -75,23 +75,3 @@ $resultado = $conn->query($sql);
                         echo intval($cond) . '%';
                     }
                     ?>
-                </td>
-                <td>
-                    <?php if (!empty($fila['imagen'])): ?>
-                        <img src="imagenes/<?= $fila['imagen'] ?>" alt="Imagen" style="max-width: 100px;">
-                    <?php else: ?>
-                        <span class="text-muted">Sin imagen</span>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-primary" href="editar.php?id=<?= $fila['id'] ?>">Editar</a>
-                    <a class="btn btn-sm btn-danger" href="eliminar.php?id=<?= $fila['id'] ?>" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
-                    <a class="btn btn-sm btn-warning" href="formulario_recibo.php?id_maquinaria=<?= $fila['id'] ?>">Recibo</a>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
-</div>
-</body>
-</html>

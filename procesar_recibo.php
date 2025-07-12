@@ -3,6 +3,99 @@
 session_start();
 include 'conexion.php';
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id_maquinaria = intval($_POST['id_maquinaria']);
+$observaciones = $_POST['observaciones'];
+$empresa_origen = $_POST['empresa_origen'];
+$empresa_destino = $_POST['empresa_destino'];
+$equipo = $_POST['equipo'];
+$inventario = $_POST['inventario'];
+$marca = $_POST['marca'];
+$serie = $_POST['serie'];
+$modelo = $_POST['modelo'];
+$motor = $_POST['motor'];
+$color = $_POST['color'];
+$placas = $_POST['placas'];
+$cilindros = $_POST['cilindros'];
+$pistones = $_POST['pistones'];
+$anillos = $_POST['anillos'];
+$inyectores = $_POST['inyectores'];
+$block = $_POST['block'];
+$cabeza = $_POST['cabeza'];
+$varillas = $_POST['varillas'];
+$resortes = $_POST['resortes'];
+$punterias = $_POST['punterias'];
+$cigueñal = $_POST['cigueñal'];
+$arbol_elevas = $_POST['arbol_elevas'];
+$retenes = $_POST['retenes'];
+$ligas = $_POST['ligas'];
+$sensores_motor = $_POST['sensores_motor'];
+$poleas = $_POST['poleas'];
+$concha = $_POST['concha'];
+$cremallera = $_POST['cremallera'];
+$clutch = $_POST['clutch'];
+$coples = $_POST['coples'];
+$bomba_inyeccion = $_POST['bomba_inyeccion'];
+$juntas = $_POST['juntas'];
+$marcha = $_POST['marcha'];
+$alternador = $_POST['alternador'];
+$filtros = $_POST['filtros'];
+$bases = $_POST['bases'];
+$soportes = $_POST['soportes'];
+$turbo = $_POST['turbo'];
+$escape = $_POST['escape'];
+$chicotes = $_POST['chicotes'];
+$transmision = $_POST['transmision'];
+$diferenciales = $_POST['diferenciales'];
+$cardan = $_POST['cardan'];
+$alarmas = $_POST['alarmas'];
+$arneses = $_POST['arneses'];
+$bobinas = $_POST['bobinas'];
+$botones = $_POST['botones'];
+$cables = $_POST['cables'];
+$cables_sensores = $_POST['cables_sensores'];
+$conectores = $_POST['conectores'];
+$electro_valvulas = $_POST['electro_valvulas'];
+$fusibles = $_POST['fusibles'];
+$porta_fusibles = $_POST['porta_fusibles'];
+$indicadores = $_POST['indicadores'];
+$presion_agua_temp_volt = $_POST['presion_agua_temp_volt'];
+$luces = $_POST['luces'];
+$modulos = $_POST['modulos'];
+$torreta = $_POST['torreta'];
+$relevadores = $_POST['relevadores'];
+$switch_llave = $_POST['switch_llave'];
+$sensores_ee = $_POST['sensores_ee'];
+$estetico = $_POST['estetico'];
+$pintura = $_POST['pintura'];
+$calcomanias = $_POST['calcomanias'];
+$asiento = $_POST['asiento'];
+$tapiceria = $_POST['tapiceria'];
+$tolvas = $_POST['tolvas'];
+$cristales = $_POST['cristales'];
+$accesorios = $_POST['accesorios'];
+$sistema_riego = $_POST['sistema_riego'];
+$banco_valvulas = $_POST['banco_valvulas'];
+$bombas_accesorios = $_POST['bombas_accesorios'];
+$coples_hidraulicos = $_POST['coples_hidraulicos'];
+$clutch_hidraulico = $_POST['clutch_hidraulico'];
+$gatos_levante = $_POST['gatos_levante'];
+$gatos_direccion = $_POST['gatos_direccion'];
+$gatos_accesorios = $_POST['gatos_accesorios'];
+$mangueras = $_POST['mangueras'];
+$motores_hidraulicos = $_POST['motores_hidraulicos'];
+$orbitrol = $_POST['orbitrol'];
+$torques_huv_satelites = $_POST['torques_huv_satelites'];
+$valvulas_retencion = $_POST['valvulas_retencion'];
+$reductores = $_POST['reductores'];
+$puntas = $_POST['puntas'];
+$cuchillas = $_POST['cuchillas'];
+$cepillos = $_POST['cepillos'];
+$separadores = $_POST['separadores'];
+$llantas = $_POST['llantas'];
+$rines = $_POST['rines'];
+$bandas_orugas = $_POST['bandas_orugas'];
+
 function convertir_valor($estado) {
     switch ($estado) {
         case 'bueno': return 100;
@@ -12,41 +105,203 @@ function convertir_valor($estado) {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $id_maquinaria = intval($_POST['id_maquinaria']);
-    $motor = $_POST['motor'];
-    $mecanico = $_POST['mecanico'];
-    $hidraulico = $_POST['hidraulico'];
-    $electrico = $_POST['electrico'];
-    $estetico = $_POST['estetico'];
-    $consumibles = $_POST['consumibles'];
-    $condicion_maquina = $_POST['condicion_maquina'];
+$total = 0;
+$campos_total = 0;
 
-    $v_motor = convertir_valor($motor);
-    $v_mecanico = convertir_valor($mecanico);
-    $v_hidraulico = convertir_valor($hidraulico);
-    $v_electrico = convertir_valor($electrico);
-    $v_estetico = convertir_valor($estetico);
-    $v_consumibles = convertir_valor($consumibles);
+$total += convertir_valor($empresa_origen);
+$campos_total++;
+$total += convertir_valor($empresa_destino);
+$campos_total++;
+$total += convertir_valor($equipo);
+$campos_total++;
+$total += convertir_valor($inventario);
+$campos_total++;
+$total += convertir_valor($marca);
+$campos_total++;
+$total += convertir_valor($serie);
+$campos_total++;
+$total += convertir_valor($modelo);
+$campos_total++;
+$total += convertir_valor($motor);
+$campos_total++;
+$total += convertir_valor($color);
+$campos_total++;
+$total += convertir_valor($placas);
+$campos_total++;
+$total += convertir_valor($cilindros);
+$campos_total++;
+$total += convertir_valor($pistones);
+$campos_total++;
+$total += convertir_valor($anillos);
+$campos_total++;
+$total += convertir_valor($inyectores);
+$campos_total++;
+$total += convertir_valor($block);
+$campos_total++;
+$total += convertir_valor($cabeza);
+$campos_total++;
+$total += convertir_valor($varillas);
+$campos_total++;
+$total += convertir_valor($resortes);
+$campos_total++;
+$total += convertir_valor($punterias);
+$campos_total++;
+$total += convertir_valor($cigueñal);
+$campos_total++;
+$total += convertir_valor($arbol_elevas);
+$campos_total++;
+$total += convertir_valor($retenes);
+$campos_total++;
+$total += convertir_valor($ligas);
+$campos_total++;
+$total += convertir_valor($sensores_motor);
+$campos_total++;
+$total += convertir_valor($poleas);
+$campos_total++;
+$total += convertir_valor($concha);
+$campos_total++;
+$total += convertir_valor($cremallera);
+$campos_total++;
+$total += convertir_valor($clutch);
+$campos_total++;
+$total += convertir_valor($coples);
+$campos_total++;
+$total += convertir_valor($bomba_inyeccion);
+$campos_total++;
+$total += convertir_valor($juntas);
+$campos_total++;
+$total += convertir_valor($marcha);
+$campos_total++;
+$total += convertir_valor($alternador);
+$campos_total++;
+$total += convertir_valor($filtros);
+$campos_total++;
+$total += convertir_valor($bases);
+$campos_total++;
+$total += convertir_valor($soportes);
+$campos_total++;
+$total += convertir_valor($turbo);
+$campos_total++;
+$total += convertir_valor($escape);
+$campos_total++;
+$total += convertir_valor($chicotes);
+$campos_total++;
+$total += convertir_valor($transmision);
+$campos_total++;
+$total += convertir_valor($diferenciales);
+$campos_total++;
+$total += convertir_valor($cardan);
+$campos_total++;
+$total += convertir_valor($alarmas);
+$campos_total++;
+$total += convertir_valor($arneses);
+$campos_total++;
+$total += convertir_valor($bobinas);
+$campos_total++;
+$total += convertir_valor($botones);
+$campos_total++;
+$total += convertir_valor($cables);
+$campos_total++;
+$total += convertir_valor($cables_sensores);
+$campos_total++;
+$total += convertir_valor($conectores);
+$campos_total++;
+$total += convertir_valor($electro_valvulas);
+$campos_total++;
+$total += convertir_valor($fusibles);
+$campos_total++;
+$total += convertir_valor($porta_fusibles);
+$campos_total++;
+$total += convertir_valor($indicadores);
+$campos_total++;
+$total += convertir_valor($presion_agua_temp_volt);
+$campos_total++;
+$total += convertir_valor($luces);
+$campos_total++;
+$total += convertir_valor($modulos);
+$campos_total++;
+$total += convertir_valor($torreta);
+$campos_total++;
+$total += convertir_valor($relevadores);
+$campos_total++;
+$total += convertir_valor($switch_llave);
+$campos_total++;
+$total += convertir_valor($sensores_ee);
+$campos_total++;
+$total += convertir_valor($estetico);
+$campos_total++;
+$total += convertir_valor($pintura);
+$campos_total++;
+$total += convertir_valor($calcomanias);
+$campos_total++;
+$total += convertir_valor($asiento);
+$campos_total++;
+$total += convertir_valor($tapiceria);
+$campos_total++;
+$total += convertir_valor($tolvas);
+$campos_total++;
+$total += convertir_valor($cristales);
+$campos_total++;
+$total += convertir_valor($accesorios);
+$campos_total++;
+$total += convertir_valor($sistema_riego);
+$campos_total++;
+$total += convertir_valor($banco_valvulas);
+$campos_total++;
+$total += convertir_valor($bombas_accesorios);
+$campos_total++;
+$total += convertir_valor($coples_hidraulicos);
+$campos_total++;
+$total += convertir_valor($clutch_hidraulico);
+$campos_total++;
+$total += convertir_valor($gatos_levante);
+$campos_total++;
+$total += convertir_valor($gatos_direccion);
+$campos_total++;
+$total += convertir_valor($gatos_accesorios);
+$campos_total++;
+$total += convertir_valor($mangueras);
+$campos_total++;
+$total += convertir_valor($motores_hidraulicos);
+$campos_total++;
+$total += convertir_valor($orbitrol);
+$campos_total++;
+$total += convertir_valor($torques_huv_satelites);
+$campos_total++;
+$total += convertir_valor($valvulas_retencion);
+$campos_total++;
+$total += convertir_valor($reductores);
+$campos_total++;
+$total += convertir_valor($puntas);
+$campos_total++;
+$total += convertir_valor($cuchillas);
+$campos_total++;
+$total += convertir_valor($cepillos);
+$campos_total++;
+$total += convertir_valor($separadores);
+$campos_total++;
+$total += convertir_valor($llantas);
+$campos_total++;
+$total += convertir_valor($rines);
+$campos_total++;
+$total += convertir_valor($bandas_orugas);
+$campos_total++;
+$condicion_estimada = round($total / $campos_total, 2);
+// Agregar condicion_estimada y observaciones al final
 
-    $condicion = (
-        (($v_motor + $v_mecanico) / 2) * 0.30 +
-        ($v_hidraulico * 0.30) +
-        ($v_electrico * 0.25) +
-        ($v_estetico * 0.05) +
-        ($v_consumibles * 0.10)
-    );
-
-    $stmt = $conn->prepare("UPDATE maquinaria SET 
-        motor = ?, mecanico = ?, hidraulico = ?, electrico = ?, estetico = ?, consumibles = ?, 
-        condicion_estimada = ?, condicion_maquina = ? 
-        WHERE id = ?");
-    $stmt->bind_param("ssssssisi", $motor, $mecanico, $hidraulico, $electrico, $estetico, $consumibles, $condicion, $condicion_maquina, $id_maquinaria);
+    $stmt = $conn->prepare("UPDATE recibos SET
+    empresa_origen = ?, empresa_destino = ?, equipo = ?, inventario = ?, marca = ?, serie = ?, modelo = ?, motor = ?, color = ?, placas = ?, cilindros = ?, pistones = ?, anillos = ?, inyectores = ?, block = ?, cabeza = ?, varillas = ?, resortes = ?, punterias = ?, cigueñal = ?, arbol_elevas = ?, retenes = ?, ligas = ?, sensores_motor = ?, poleas = ?, concha = ?, cremallera = ?, clutch = ?, coples = ?, bomba_inyeccion = ?, juntas = ?, marcha = ?, alternador = ?, filtros = ?, bases = ?, soportes = ?, turbo = ?, escape = ?, chicotes = ?, transmision = ?, diferenciales = ?, cardan = ?, alarmas = ?, arneses = ?, bobinas = ?, botones = ?, cables = ?, cables_sensores = ?, conectores = ?, electro_valvulas = ?, fusibles = ?, porta_fusibles = ?, indicadores = ?, presion_agua_temp_volt = ?, luces = ?, modulos = ?, torreta = ?, relevadores = ?, switch_llave = ?, sensores_ee = ?, estetico = ?, pintura = ?, calcomanias = ?, asiento = ?, tapiceria = ?, tolvas = ?, cristales = ?, accesorios = ?, sistema_riego = ?, banco_valvulas = ?, bombas_accesorios = ?, coples_hidraulicos = ?, clutch_hidraulico = ?, gatos_levante = ?, gatos_direccion = ?, gatos_accesorios = ?, mangueras = ?, motores_hidraulicos = ?, orbitrol = ?, torques_huv_satelites = ?, valvulas_retencion = ?, reductores = ?, puntas = ?, cuchillas = ?, cepillos = ?, separadores = ?, llantas = ?, rines = ?, bandas_orugas = ?,
+    condicion_estimada = ?, observaciones = ?
+    WHERE id_maquinaria = ?");
+    if (!$stmt) {
+        die("Error en la consulta: " . $conn->error);
+    }
+    $stmt->bind_param("isssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssdsi", $id_maquinaria, $empresa_origen, $empresa_destino, $equipo, $inventario, $marca, $serie, $modelo, $motor, $color, $placas, $cilindros, $pistones, $anillos, $inyectores, $block, $cabeza, $varillas, $resortes, $punterias, $cigueñal, $arbol_elevas, $retenes, $ligas, $sensores_motor, $poleas, $concha, $cremallera, $clutch, $coples, $bomba_inyeccion, $juntas, $marcha, $alternador, $filtros, $bases, $soportes, $turbo, $escape, $chicotes, $transmision, $diferenciales, $cardan, $alarmas, $arneses, $bobinas, $botones, $cables, $cables_sensores, $conectores, $electro_valvulas, $fusibles, $porta_fusibles, $indicadores, $presion_agua_temp_volt, $luces, $modulos, $torreta, $relevadores, $switch_llave, $sensores_ee, $estetico, $pintura, $calcomanias, $asiento, $tapiceria, $tolvas, $cristales, $accesorios, $sistema_riego, $banco_valvulas, $bombas_accesorios, $coples_hidraulicos, $clutch_hidraulico, $gatos_levante, $gatos_direccion, $gatos_accesorios, $mangueras, $motores_hidraulicos, $orbitrol, $torques_huv_satelites, $valvulas_retencion, $reductores, $puntas, $cuchillas, $cepillos, $separadores, $llantas, $rines, $bandas_orugas, $condicion_estimada, $observaciones, $id_maquinaria);
     if ($stmt->execute()) {
         header("Location: index.php?mensaje=recibo_guardado");
         exit();
     } else {
-        echo "❌ Error al guardar recibo.";
+        echo "❌ Error al guardar el recibo.";
     }
 }
 ?>

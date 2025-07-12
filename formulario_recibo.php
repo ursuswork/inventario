@@ -3,22 +3,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Recibo Unidad</title>
+  <title>Recibo Unidad - Motor e Hidráulico</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body { margin: 40px; background: white; }
-    .form-section { border: 1px solid #ddd; padding: 20px; margin-bottom: 30px; border-radius: 10px; }
-    .form-section h4 { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    .form-section { border: 2px solid #007bff; padding: 20px; margin-bottom: 30px; border-radius: 10px; background: #f0f8ff; }
+    .form-section h4 { border-bottom: 1px solid #ccc; margin-bottom: 20px; color: #0056b3; }
     .row .col-md-6 { margin-bottom: 15px; }
     select { width: 100%; }
   </style>
 </head>
 <body>
-  <h2 class="text-center mb-4">📋 Recibo de Unidad</h2>
+  <h2 class="text-center mb-4">📋 Recibo de Unidad (Motor e Hidráulico)</h2>
   <form method="POST" action="procesar_recibo.php" oninput="calcularPorcentaje()">
     <input type="hidden" name="id_maquinaria" value="<?= $_GET['id_maquinaria'] ?>">
     <div class="form-section">
-<h4>Motor y Componentes</h4>
+<h4>🛠️ Motor (30%)</h4>
 <div class="row">
       <div class="col-md-6">
         <label class="form-label">Cilindros:</label>
@@ -309,307 +309,10 @@
           <option value="40">Malo</option>
         </select>
       </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Transmision:</label>
-        <select name="transmision" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Diferenciales:</label>
-        <select name="diferenciales" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Cardan:</label>
-        <select name="cardan" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Alarmas:</label>
-        <select name="alarmas" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Arneses:</label>
-        <select name="arneses" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Bobinas:</label>
-        <select name="bobinas" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Botones:</label>
-        <select name="botones" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Cables:</label>
-        <select name="cables" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Cables sensores:</label>
-        <select name="cables_sensores" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Conectores:</label>
-        <select name="conectores" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Electro valvulas:</label>
-        <select name="electro_valvulas" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Fusibles:</label>
-        <select name="fusibles" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Porta fusibles:</label>
-        <select name="porta_fusibles" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Indicadores:</label>
-        <select name="indicadores" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Presion agua temp volt:</label>
-        <select name="presion_agua_temp_volt" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Luces:</label>
-        <select name="luces" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Modulos:</label>
-        <select name="modulos" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Torreta:</label>
-        <select name="torreta" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Relevadores:</label>
-        <select name="relevadores" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Switch llave:</label>
-        <select name="switch_llave" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Sensores ee:</label>
-        <select name="sensores_ee" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Estetico:</label>
-        <select name="estetico" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Pintura:</label>
-        <select name="pintura" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Calcomanias:</label>
-        <select name="calcomanias" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Asiento:</label>
-        <select name="asiento" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Tapiceria:</label>
-        <select name="tapiceria" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Tolvas:</label>
-        <select name="tolvas" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Cristales:</label>
-        <select name="cristales" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Accesorios:</label>
-        <select name="accesorios" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Sistema riego:</label>
-        <select name="sistema_riego" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
+            </div></div>
+<div class="form-section">
+<h4>💧 Sistema Hidráulico (30%)</h4>
+<div class="row">
       <div class="col-md-6">
         <label class="form-label">Banco valvulas:</label>
         <select name="banco_valvulas" class="form-select" required>
@@ -739,76 +442,6 @@
           <option value="40">Malo</option>
         </select>
       </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Puntas:</label>
-        <select name="puntas" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Cuchillas:</label>
-        <select name="cuchillas" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Cepillos:</label>
-        <select name="cepillos" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Separadores:</label>
-        <select name="separadores" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Llantas:</label>
-        <select name="llantas" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Rines:</label>
-        <select name="rines" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
-            
-      <div class="col-md-6">
-        <label class="form-label">Bandas orugas:</label>
-        <select name="bandas_orugas" class="form-select" required>
-          <option value="">Selecciona...</option>
-          <option value="100">Bueno</option>
-          <option value="70">Regular</option>
-          <option value="40">Malo</option>
-        </select>
-      </div>
             </div></div>
 
     <div class="form-section">
@@ -821,29 +454,25 @@
       <input type="hidden" name="condicion_estimada" id="condicion_estimada">
     </div>
 
-    <div class="text-center">
+    <div class="text-center mb-3">
+      <button type="button" onclick="window.print()" class="btn btn-outline-primary me-2">🖨️ Imprimir</button>
       <button type="submit" class="btn btn-success">Guardar Recibo</button>
     </div>
   </form>
 
 <script>
 function calcularSeccion(selector, peso) {
-  const valores = Array.from(document.querySelectorAll(selector)).map(el => parseInt(el.value) || 0);
+  const selects = document.querySelectorAll(selector);
+  const valores = Array.from(selects).map(el => parseInt(el.value) || 0);
   if (valores.length === 0) return 0;
   const promedio = valores.reduce((a, b) => a + b, 0) / valores.length;
   return promedio * peso;
 }
 
 function calcularPorcentaje() {
-  const total =
-    calcularSeccion('.componentes_del_motor', 0.30) +
-    calcularSeccion('.mecanico', 0.30) +
-    calcularSeccion('.eléctrico_y_electrónico', 0.25) +
-    calcularSeccion('.hidráulico', 0.30) +
-    calcularSeccion('.estético', 0.05) +
-    calcularSeccion('.consumibles', 0.10);
-
-  const resultado = Math.round(total);
+  const motor = calcularSeccion('select[name^="cilindros"], select[name^="pistones"], select[name^="anillos"]', 0.30);
+  const hidraulico = calcularSeccion('select[name^="banco_valvulas"], select[name^="mangueras"], select[name^="orbitrol"]', 0.30);
+  const resultado = Math.round(motor + hidraulico);
   document.getElementById('resultado').innerText = resultado + "%";
   document.getElementById('condicion_estimada').value = resultado;
 }

@@ -91,7 +91,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="cilindros" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="cilindros" value="malo" required>
@@ -107,7 +107,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="pistones" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="pistones" value="malo" required>
@@ -123,7 +123,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="inyectores" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="inyectores" value="malo" required>
@@ -139,7 +139,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="block" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="block" value="malo" required>
@@ -155,7 +155,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="cabeza" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="cabeza" value="malo" required>
@@ -171,7 +171,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="varillas" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="varillas" value="malo" required>
@@ -187,7 +187,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="resortes" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="resortes" value="malo" required>
@@ -203,7 +203,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="punterias" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="punterias" value="malo" required>
@@ -223,7 +223,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="banco_valvulas" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="banco_valvulas" value="malo" required>
@@ -239,7 +239,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="bombas_accesorios" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="bombas_accesorios" value="malo" required>
@@ -255,7 +255,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="coples_hidraulicos" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="coples_hidraulicos" value="malo" required>
@@ -271,7 +271,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="gatos_direccion" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="gatos_direccion" value="malo" required>
@@ -287,7 +287,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="mangueras" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="mangueras" value="malo" required>
@@ -303,7 +303,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="reductores" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="reductores" value="malo" required>
@@ -323,7 +323,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="alarmas" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="alarmas" value="malo" required>
@@ -339,7 +339,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="bobinas" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="bobinas" value="malo" required>
@@ -355,7 +355,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="cables" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="cables" value="malo" required>
@@ -371,7 +371,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="luces" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="luces" value="malo" required>
@@ -387,7 +387,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="modulos" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="modulos" value="malo" required>
@@ -403,7 +403,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="relevadores" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="relevadores" value="malo" required>
@@ -423,7 +423,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="pintura" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="pintura" value="malo" required>
@@ -439,7 +439,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="calcomanias" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="calcomanias" value="malo" required>
@@ -455,7 +455,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="asiento" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="asiento" value="malo" required>
@@ -471,7 +471,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="tapiceria" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="tapiceria" value="malo" required>
@@ -491,7 +491,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="llantas" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="llantas" value="malo" required>
@@ -507,7 +507,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="rines" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="rines" value="malo" required>
@@ -523,7 +523,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="puntas" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="puntas" value="malo" required>
@@ -539,7 +539,7 @@
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="bandas_orugas" value="regular" required>
-                <label class="form-check-label">🔶 Regular</label>
+                <label class="form-check-label">🟡 Regular</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="bandas_orugas" value="malo" required>

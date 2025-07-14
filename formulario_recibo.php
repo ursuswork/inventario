@@ -100,3 +100,89 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 <!-- Aquí iría el resto del HTML, tal como ya lo tienes -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Recibo de Unidad</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .seccion { margin-top: 30px; padding: 10px; border: 2px solid #000; border-radius: 10px; }
+    .titulo-seccion { font-weight: bold; background: #eee; padding: 5px 10px; border-radius: 5px; }
+    .campo { margin-bottom: 10px; }
+    .boton-opcion input { display: none; }
+    .boton-opcion label {
+      margin-right: 10px; padding: 5px 15px;
+      border: 1px solid #ccc; border-radius: 5px; cursor: pointer;
+    }
+    .boton-opcion input:checked + label { background-color: #ffc107; }
+    @media print { button { display:none; } }
+  </style>
+</head>
+<body class="container">
+<h1 class="my-4">📋 Recibo de Unidad</h1>
+
+<form method="POST">
+  <!-- ===== Datos generales ===== -->
+  <div class="row g-3">
+    <!-- (campos con required para evitar envíos vacíos) -->
+    <div class="col-md-6"><label class="form-label">Empresa Origen</label>
+      <input type="text" name="empresa_origen" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">Empresa Destino</label>
+      <input type="text" name="empresa_destino" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">Equipo</label>
+      <input type="text" name="equipo" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">Marca</label>
+      <input type="text" name="marca" class="form-control"></div>
+    <div class="col-md-4"><label class="form-label">Modelo</label>
+      <input type="text" name="modelo" class="form-control"></div>
+    <div class="col-md-4"><label class="form-label">Serie</label>
+      <input type="text" name="serie" class="form-control"></div>
+    <div class="col-md-4"><label class="form-label">Motor</label>
+      <input type="text" name="motor" class="form-control"></div>
+    <div class="col-md-4"><label class="form-label">Color</label>
+      <input type="text" name="color" class="form-control"></div>
+    <div class="col-md-3"><label class="form-label">Año</label>
+      <input type="text" name="anio" class="form-control"></div>
+    <div class="col-md-3"><label class="form-label">Ubicación</label>
+      <input type="text" name="ubicacion" class="form-control"></div>
+    <div class="col-md-6"><label class="form-label">Número de Inventario</label>
+      <input type="text" name="inventario" class="form-control"></div>
+    <div class="col-12"><label class="form-label">Observaciones</label>
+      <textarea name="observaciones" class="form-control"></textarea></div>
+  </div>
+  <br>
+
+<?php
+/* ====== Componentes por sección ====== */
+$secciones = [
+  'motor_mecanico' => ["CILINDROS","PISTONES","ANILLOS","INYECTORES","BLOCK","CABEZA","VARILLAS","RESORTES","PUNTERIAS","CIGUEÑAL","ARBOL DE LEVAS","RETENES","LIGAS","SENSORES","POLEAS","CONCHA","CREMAYERA","CLUTCH","COPLES","BOMBA DE INYECCION","JUNTAS","MARCHA","TUBERIA","ALTERNADOR","FILTROS","BASES","SOPORTES","TURBO","ESCAPE","CHICOTES","TRANSMISION","DIFERENCIALES","CARDAN"],
+  'hidraulico'     => ["BANCO DE VALVULAS","BOMBAS DE TRANSITO","BOMBAS DE PRECARGA","BOMBAS DE ACCESORIOS","COPLES","CLUTCH HIDRAULICO","GATOS DE LEVANTE","GATOS DE DIRECCION","GATOS DE ACCESORIOS","MANGUERAS","MOTORES HIDRAULICOS","ORBITROL","TORQUES HUV","VALVULAS DE RETENCION","REDUCTORES"],
+  'electrico'      => ["ALARMAS","ARNESES","BOBINAS","BOTONES","CABLES","CABLES DE SENSORES","CONECTORES","ELECTRO VALVULAS","FUSIBLES","PORTA FUSIBLES","INDICADORES","PRESION, AGUA, TEMPERATURA, VOLTIMETRO","LUCES","MODULOS","TORRETA","RELEVADORES","SWITCH (LLAVE)","SENSORES","SISTEMA DE RIEGO"],
+  'estetico'       => ["PINTURA","CALCOMANIAS","ASIENTO","TAPICERIA","TOLVAS","CRISTALES","ACCESORIOS"],
+  'consumibles'    => ["PUNTAS","PORTA PUNTAS","GARRAS","CUCHILLAS","CEPILLOS","SEPARADORES","LLANTAS","RINES","BANDAS / ORUGAS"]
+];
+
+foreach ($secciones as $clave => $campos) {
+  $titulo = strtoupper(str_replace('_',' ', $clave));
+  echo "<div class='seccion'><div class='titulo-seccion'>$titulo</div><div class='row'>";
+  foreach ($campos as $campo) {
+    $id = strtolower(str_replace([' ', '/', ',', '(', ')'],'_', $clave . '_' . $campo));
+    echo "<div class='col-md-6 campo'><label class='form-label'>" . ucfirst($campo) . "</label><div class='boton-opcion'>";
+    foreach (['bueno','regular','malo'] as $opcion) {
+        $opid = $id . '_' . $opcion;
+        echo "<input type='radio' name='$id' id='$opid' value='$opcion' required>";
+        echo "<label for='$opid'>" . ucfirst($opcion) . "</label>";
+    }
+    echo "</div></div>";
+  }
+  echo "</div></div>";
+}
+?>
+  <div class="my-4 text-center">
+    <button type="submit" name="submit" class="btn btn-primary">Guardar</button>
+    <button class="btn btn-secondary" onclick="window.print();return false;">Imprimir</button>
+  </div>
+</form>
+</body>
+</html>

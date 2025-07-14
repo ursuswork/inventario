@@ -15,6 +15,22 @@ function convertir_valor($valor) {
 
 $condicion_total = 0;
 
+// Inicializar datos vacíos
+$datos_maquinaria = [
+    'nombre' => '', 'marca' => '', 'modelo' => '', 'numero_serie' => '',
+    'motor' => '', 'color' => '', 'anio' => '', 'ubicacion' => '', 'inventario' => ''
+];
+
+// Si llega el id_maquinaria por GET, obtener los datos
+if (isset($_GET['id_maquinaria'])) {
+    $id = intval($_GET['id_maquinaria']);
+    $sql = "SELECT * FROM maquinaria WHERE id = $id";
+    $res = $conn->query($sql);
+    if ($res && $res->num_rows > 0) {
+        $datos_maquinaria = $res->fetch_assoc();
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $empresa_origen = $_POST['empresa_origen'] ?? '';
     $empresa_destino = $_POST['empresa_destino'] ?? '';
@@ -111,23 +127,52 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body class="container">
 <h1 class="my-4">📋 Recibo de Unidad</h1>
 
-<?php if ($condicion_total > 0): ?>
-<div class="mb-4">
-  <label class="form-label fw-bold">Condición estimada</label>
-  <?php
-    $color = 'bg-danger';
-    if ($condicion_total >= 80) $color = 'bg-success';
-    elseif ($condicion_total >= 60) $color = 'bg-warning';
-  ?>
-  <div class="progress" style="height: 25px;">
-    <div class="progress-bar <?= $color ?>" role="progressbar"
-         style="width: <?= intval($condicion_total) ?>%;" 
-         aria-valuenow="<?= intval($condicion_total) ?>" 
-         aria-valuemin="0" aria-valuemax="100">
-      <?= intval($condicion_total) ?>%
+<form method="POST">
+  <div class="row g-3">
+    <div class="col-md-6"><label class="form-label">Empresa Origen</label>
+      <input type="text" name="empresa_origen" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">Empresa Destino</label>
+      <input type="text" name="empresa_destino" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">Equipo</label>
+      <input type="text" name="equipo" class="form-control" required value="<?= htmlspecialchars($datos_maquinaria['nombre'] ?? '') ?>"></div>
+    <div class="col-md-4"><label class="form-label">Marca</label>
+      <input type="text" name="marca" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['marca'] ?? '') ?>"></div>
+    <div class="col-md-4"><label class="form-label">Modelo</label>
+      <input type="text" name="modelo" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['modelo'] ?? '') ?>"></div>
+    <div class="col-md-4"><label class="form-label">Serie</label>
+      <input type="text" name="serie" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['numero_serie'] ?? '') ?>"></div>
+    <div class="col-md-4"><label class="form-label">Motor</label>
+      <input type="text" name="motor" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['motor'] ?? '') ?>"></div>
+    <div class="col-md-4"><label class="form-label">Color</label>
+      <input type="text" name="color" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['color'] ?? '') ?>"></div>
+    <div class="col-md-3"><label class="form-label">Año</label>
+      <input type="text" name="anio" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['anio'] ?? '') ?>"></div>
+    <div class="col-md-3"><label class="form-label">Ubicación</label>
+      <input type="text" name="ubicacion" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['ubicacion'] ?? '') ?>"></div>
+    <div class="col-md-6"><label class="form-label">Número de Inventario</label>
+      <input type="text" name="inventario" class="form-control" value="<?= htmlspecialchars($datos_maquinaria['inventario'] ?? '') ?>"></div>
+    <div class="col-12"><label class="form-label">Observaciones</label>
+      <textarea name="observaciones" class="form-control"></textarea></div>
+  </div>
+  <div class="my-4">
+    <label class="form-label fw-bold">Condición estimada</label>
+    <?php
+      $color = 'bg-danger';
+      if ($condicion_total >= 80) $color = 'bg-success';
+      elseif ($condicion_total >= 60) $color = 'bg-warning';
+    ?>
+    <div class="progress" style="height: 25px;">
+      <div class="progress-bar <?= $color ?>" role="progressbar"
+           style="width: <?= intval($condicion_total) ?>%;" 
+           aria-valuenow="<?= intval($condicion_total) ?>" 
+           aria-valuemin="0" aria-valuemax="100">
+        <?= intval($condicion_total) ?>%
+      </div>
     </div>
   </div>
-</div>
-<?php endif; ?>
+  <div class="my-4 text-center">
+    <button type="submit" name="submit" class="btn btn-primary">Guardar</button>
+  </div>
+</form>
 </body>
 </html>

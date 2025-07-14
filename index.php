@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if (!isset($_SESSION['login'])) {
@@ -39,7 +38,6 @@ if (!$resultado) {
     </div>
   </div>
 </nav>
-
 
 <div class="container mt-5">
     <form class="mb-3" method="GET">
@@ -94,9 +92,18 @@ if (!$resultado) {
                     if ($cond === null || $cond === '') {
                         echo '<span class="text-muted">—</span>';
                     } else {
-                        echo intval($cond) . '%';
-                    }
+                        $color = 'bg-danger';
+                        if ($cond >= 80) $color = 'bg-success';
+                        elseif ($cond >= 60) $color = 'bg-warning';
                     ?>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar <?= $color ?>" role="progressbar"
+                             style="width: <?= intval($cond) ?>%;" aria-valuenow="<?= intval($cond) ?>"
+                             aria-valuemin="0" aria-valuemax="100">
+                            <?= intval($cond) ?>%
+                        </div>
+                    </div>
+                    <?php } ?>
                 </td>
                 <td>
                     <?php if (!empty($fila['imagen'])): ?>
@@ -116,50 +123,6 @@ if (!$resultado) {
     </table>
 </div>
 
-<!-- Modal para imagen -->
-<div class="modal fade" id="imagenModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-body p-0">
-        <img src="" id="imagenAmpliada" class="w-100">
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-document.querySelectorAll('img[alt="Imagen"]').forEach(function(img) {
-  img.style.cursor = 'pointer';
-  img.addEventListener('click', function() {
-    document.getElementById('imagenAmpliada').src = this.src;
-    new bootstrap.Modal(document.getElementById('imagenModal')).show();
-  });
-});
-</script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Modal para imagen -->
-<div class="modal fade" id="imagenModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-body p-0">
-        <img src="" id="imagenAmpliada" class="w-100">
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-document.querySelectorAll('img[alt="Imagen"]').forEach(function(img) {
-  img.style.cursor = 'pointer';
-  img.addEventListener('click', function() {
-    document.getElementById('imagenAmpliada').src = this.src;
-    new bootstrap.Modal(document.getElementById('imagenModal')).show();
-  });
-});
-</script>
 </body>
-
-
 </html>

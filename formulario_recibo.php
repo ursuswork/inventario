@@ -4,31 +4,55 @@ include 'conexion.php';
 
 function convertir_valor($valor) {
     switch ($valor) {
-        case 'bueno': return 100;
+        case 'bueno':   return 100;
         case 'regular': return 70;
-        case 'malo': return 40;
-        default: return 0;
+        case 'malo':    return 40;
+        default:        return 0;
     }
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $componentes = $_POST;
-    unset($componentes['submit']);
 
+    // 1. Datos generales
+    $empresa_origen = $_POST['empresa_origen'];
+    $empresa_destino = $_POST['empresa_destino'];
+    $equipo = $_POST['equipo'];
+    $marca = $_POST['marca'];
+    $modelo = $_POST['modelo'];
+    $serie = $_POST['serie'];
+    $motor = $_POST['motor'];
+    $color = $_POST['color'];
+    $anio = $_POST['anio'];
+    $ubicacion = $_POST['ubicacion'];
+    $inventario = $_POST['inventario'];
+    $observaciones = $_POST['observaciones'];
+
+    // 2. Identificar los componentes seleccionados (todo lo que no sea campo general)
+    $componentes = $_POST;
+    unset(
+        $componentes['submit'],
+        $componentes['empresa_origen'], $componentes['empresa_destino'],
+        $componentes['equipo'], $componentes['marca'], $componentes['modelo'],
+        $componentes['serie'], $componentes['motor'], $componentes['color'],
+        $componentes['anio'], $componentes['ubicacion'], $componentes['inventario'],
+        $componentes['observaciones']
+    );
+
+    // 3. Pesos de las secciones
     $secciones = [
         'motor_mecanico' => 0.30,
-        'hidraulico' => 0.30,
-        'electrico' => 0.25,
-        'estetico' => 0.05,
-        'consumibles' => 0.10
+        'hidraulico'     => 0.30,
+        'electrico'      => 0.25,
+        'estetico'       => 0.05,
+        'consumibles'    => 0.10
     ];
-
     $porcentajes = $conteos = array_fill_keys(array_keys($secciones), 0);
 
     foreach ($componentes as $campo => $valor) {
         $val = convertir_valor($valor);
         foreach ($secciones as $clave => $peso) {
-            if (str_starts_with($campo, $clave . '_')) {
+            // Compatibilidad (< PHP 8 usar strpos)
+            if (strpos($campo, $clave . '_') === 0) {
                 $porcentajes[$clave] += $val;
                 $conteos[$clave]++;
                 break;
@@ -44,15 +68,53 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    $stmt = $conn->prepare("INSERT INTO recibo_unidad (condicion_total) VALUES (?)");
-    $stmt->bind_param("d", $condicion_total);
-    $stmt->execute();
-    $stmt->close();
+    /*========================================
+     =   Insertar Recibo + Componentes       =
+     ========================================*/
 
-    echo "<script>alert('Formulario guardado con éxito.');</script>";
+    // Iniciar transacción por seguridad
+    $conn->begin_transaction();
+
+    try {
+        // 1) Inserta el recibo
+        $stmt = $conn->prepare(
+            "INSERT INTO recibo_unidad
+            (empresa_origen, empresa_destino, equipo, marca, modelo, serie, motor,
+             color, anio, ubicacion, inventario, observaciones, condicion_total)
+             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)"
+        );
+        $stmt->bind_param(
+            "ssssssssssssd",
+            $empresa_origen, $empresa_destino, $equipo, $marca, $modelo,
+            $serie, $motor, $color, $anio, $ubicacion, $inventario,
+            $observaciones, $condicion_total
+        );
+        $stmt->execute();
+        $id_recibo = $conn->insert_id;
+        $stmt->close();
+
+        // 2) Inserta todos los componentes
+        $compStmt = $conn->prepare(
+            "INSERT INTO componentes_recibo (id_recibo, componente, estado)
+             VALUES (?,?,?)"
+        );
+        foreach ($componentes as $nombre => $estado) {
+            $compStmt->bind_param("iss", $id_recibo, $nombre, $estado);
+            $compStmt->execute();
+        }
+        $compStmt->close();
+
+        // 3) Commit
+        $conn->commit();
+
+        echo "<script>alert('Formulario guardado con éxito.'); location.href='recibo_unidad.php';</script>";
+
+    } catch (Exception $e) {
+        $conn->rollback();
+        echo "<script>alert('❌ Ocurrió un error al guardar: " . $e->getMessage() . "');</script>";
+    }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -65,39 +127,67 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     .campo { margin-bottom: 10px; }
     .boton-opcion input { display: none; }
     .boton-opcion label {
-      margin-right: 10px;
-      padding: 5px 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      cursor: pointer;
+      margin-right: 10px; padding: 5px 15px;
+      border: 1px solid #ccc; border-radius: 5px; cursor: pointer;
     }
-    .boton-opcion input:checked + label {
-      background-color: #ffc107;
-    }
+    .boton-opcion input:checked + label { background-color: #ffc107; }
+    @media print { button { display:none; } }
   </style>
 </head>
 <body class="container">
 <h1 class="my-4">📋 Recibo de Unidad</h1>
+
 <form method="POST">
+  <!-- ===== Datos generales ===== -->
+  <div class="row g-3">
+    <!-- (campos con required para evitar envíos vacíos) -->
+    <div class="col-md-6"><label class="form-label">Empresa Origen</label>
+      <input type="text" name="empresa_origen" class="form-control" required></div>
+    <div class="col-md-6"><label class="form-label">Empresa Destino</label>
+      <input type="text" name="empresa_destino" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">Equipo</label>
+      <input type="text" name="equipo" class="form-control" required></div>
+    <div class="col-md-4"><label class="form-label">Marca</label>
+      <input type="text" name="marca" class="form-control"></div>
+    <div class="col-md-4"><label class="form-label">Modelo</label>
+      <input type="text" name="modelo" class="form-control"></div>
+    <div class="col-md-4"><label class="form-label">Serie</label>
+      <input type="text" name="serie" class="form-control"></div>
+    <div class="col-md-4"><label class="form-label">Motor</label>
+      <input type="text" name="motor" class="form-control"></div>
+    <div class="col-md-4"><label class="form-label">Color</label>
+      <input type="text" name="color" class="form-control"></div>
+    <div class="col-md-3"><label class="form-label">Año</label>
+      <input type="text" name="anio" class="form-control"></div>
+    <div class="col-md-3"><label class="form-label">Ubicación</label>
+      <input type="text" name="ubicacion" class="form-control"></div>
+    <div class="col-md-6"><label class="form-label">Número de Inventario</label>
+      <input type="text" name="inventario" class="form-control"></div>
+    <div class="col-12"><label class="form-label">Observaciones</label>
+      <textarea name="observaciones" class="form-control"></textarea></div>
+  </div>
+  <br>
+
 <?php
+/* ====== Componentes por sección ====== */
 $secciones = [
   'motor_mecanico' => ["CILINDROS","PISTONES","ANILLOS","INYECTORES","BLOCK","CABEZA","VARILLAS","RESORTES","PUNTERIAS","CIGUEÑAL","ARBOL DE LEVAS","RETENES","LIGAS","SENSORES","POLEAS","CONCHA","CREMAYERA","CLUTCH","COPLES","BOMBA DE INYECCION","JUNTAS","MARCHA","TUBERIA","ALTERNADOR","FILTROS","BASES","SOPORTES","TURBO","ESCAPE","CHICOTES","TRANSMISION","DIFERENCIALES","CARDAN"],
-  'hidraulico' => ["BANCO DE VALVULAS","BOMBAS DE TRANSITO","BOMBAS DE PRECARGA","BOMBAS DE ACCESORIOS","COPLES","CLUTCH HIDRAULICO","GATOS DE LEVANTE","GATOS DE DIRECCION","GATOS DE ACCESORIOS","MANGUERAS","MOTORES HIDRAULICOS","ORBITROL","TORQUES HUV","VALVULAS DE RETENCION","REDUCTORES"],
-  'electrico' => ["ALARMAS","ARNESES","BOBINAS","BOTONES","CABLES","CABLES DE SENSORES","CONECTORES","ELECTRO VALVULAS","FUSIBLES","PORTA FUSIBLES","INDICADORES","PRESION, AGUA, TEMPERATURA, VOLTIMETRO","LUCES","MODULOS","TORRETA","RELEVADORES","SWITCH (LLAVE)","SENSORES","SISTEMA DE RIEGO"],
-  'estetico' => ["PINTURA","CALCOMANIAS","ASIENTO","TAPICERIA","TOLVAS","CRISTALES","ACCESORIOS"],
-  'consumibles' => ["PUNTAS","PORTA PUNTAS","GARRAS","CUCHILLAS","CEPILLOS","SEPARADORES","LLANTAS","RINES","BANDAS / ORUGAS"]
+  'hidraulico'     => ["BANCO DE VALVULAS","BOMBAS DE TRANSITO","BOMBAS DE PRECARGA","BOMBAS DE ACCESORIOS","COPLES","CLUTCH HIDRAULICO","GATOS DE LEVANTE","GATOS DE DIRECCION","GATOS DE ACCESORIOS","MANGUERAS","MOTORES HIDRAULICOS","ORBITROL","TORQUES HUV","VALVULAS DE RETENCION","REDUCTORES"],
+  'electrico'      => ["ALARMAS","ARNESES","BOBINAS","BOTONES","CABLES","CABLES DE SENSORES","CONECTORES","ELECTRO VALVULAS","FUSIBLES","PORTA FUSIBLES","INDICADORES","PRESION, AGUA, TEMPERATURA, VOLTIMETRO","LUCES","MODULOS","TORRETA","RELEVADORES","SWITCH (LLAVE)","SENSORES","SISTEMA DE RIEGO"],
+  'estetico'       => ["PINTURA","CALCOMANIAS","ASIENTO","TAPICERIA","TOLVAS","CRISTALES","ACCESORIOS"],
+  'consumibles'    => ["PUNTAS","PORTA PUNTAS","GARRAS","CUCHILLAS","CEPILLOS","SEPARADORES","LLANTAS","RINES","BANDAS / ORUGAS"]
 ];
 
 foreach ($secciones as $clave => $campos) {
-  $titulo = strtoupper(str_replace('_', ' ', $clave));
+  $titulo = strtoupper(str_replace('_',' ', $clave));
   echo "<div class='seccion'><div class='titulo-seccion'>$titulo</div><div class='row'>";
   foreach ($campos as $campo) {
-    $id = strtolower(str_replace([' ', '/', ',', '(', ')'], '_', "$clave" . '_' . "$campo"));
+    $id = strtolower(str_replace([' ', '/', ',', '(', ')'],'_', $clave . '_' . $campo));
     echo "<div class='col-md-6 campo'><label class='form-label'>" . ucfirst($campo) . "</label><div class='boton-opcion'>";
-    foreach (["bueno", "regular", "malo"] as $opcion) {
-      $opid = "$id" . "_" . "$opcion";
-      echo "<input type='radio' name='$id' id='$opid' value='$opcion'>";
-      echo "<label for='$opid'>" . ucfirst($opcion) . "</label>";
+    foreach (['bueno','regular','malo'] as $opcion) {
+        $opid = $id . '_' . $opcion;
+        echo "<input type='radio' name='$id' id='$opid' value='$opcion' required>";
+        echo "<label for='$opid'>" . ucfirst($opcion) . "</label>";
     }
     echo "</div></div>";
   }
@@ -105,8 +195,8 @@ foreach ($secciones as $clave => $campos) {
 }
 ?>
   <div class="my-4 text-center">
-    <button class="btn btn-primary" type="submit" name="submit">Guardar</button>
-    <button class="btn btn-secondary" onclick="window.print(); return false;">Imprimir</button>
+    <button type="submit" name="submit" class="btn btn-primary">Guardar</button>
+    <button class="btn btn-secondary" onclick="window.print();return false;">Imprimir</button>
   </div>
 </form>
 </body>
